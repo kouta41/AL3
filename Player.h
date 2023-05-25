@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include"PlayerBullet.h"
 #include"Input.h"
 #include <cassert>
 
@@ -13,8 +14,15 @@ class Player {
 
 	void Draw(ViewProjection);
 
+	/// <summary>
+	/// 攻撃
+	/// </summary>
+	void Attack();
+
 	//キーボード入力
 	Input* input_ = nullptr;
+	//弾
+	PlayerBullet* bullet_ = nullptr;
 
 	private:
 		//ワールド変換データ
