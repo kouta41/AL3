@@ -7,7 +7,12 @@
 #include <cmath>
 #include <cassert>
 
-
+Player::~Player() {
+	//bullet_の解放
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
+}
 
 void Player::Initialize(Model* model, uint32_t textureHandle) { 
 	assert(model);
@@ -20,6 +25,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 void Player::Update() {
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
+	//ワールドトランスフォームの更新
+	worldTransform_.UpdateMatrix();
 
 	//移動ベクトル
 	Vector3 move = { 0,0,0 };
@@ -58,8 +65,8 @@ void Player::Update() {
 	Attack();
 
 	//弾更新
-	if (bullet_) {
-		bullet_->Update();
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 	}
 
 	//座標移動（ベクトルの加算）
@@ -90,12 +97,13 @@ void Player::Update() {
 
 void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE)) {
+		
 		//弾を生成し。初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initiaize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, worldTransform_.translation_);
 
 		//弾を登録する
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }
 
@@ -103,8 +111,8 @@ void Player::Draw(ViewProjection viewProjection_) {
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	//弾描画
-	if (bullet_) {
-		bullet_->Draw(viewProjection_);
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection_);
 	}
 }
 

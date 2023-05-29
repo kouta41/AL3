@@ -4,10 +4,16 @@
 #include"PlayerBullet.h"
 #include"Input.h"
 #include <cassert>
+#include<list>
 
 class Player {
 
 	public:
+	/// <summary>
+	///デストラクタ 
+	/// </summary>
+	~Player();
+
 	void Initialize(Model* model,uint32_t textureHandle);
 
 	void Update();
@@ -22,7 +28,7 @@ class Player {
 	//キーボード入力
 	Input* input_ = nullptr;
 	//弾
-	PlayerBullet* bullet_ = nullptr;
+	std::list<PlayerBullet*> bullets_;
 
 	private:
 		//ワールド変換データ
