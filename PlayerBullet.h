@@ -9,7 +9,7 @@ public:
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void Initiaize(Model* model,const Vector3& position);
+	void Initialize(Model* model,const Vector3& position);
 
 	/// <summary>
 	/// XV

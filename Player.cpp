@@ -18,9 +18,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	}
 
 void Player::Update() {
-	//行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
-
+	
 	//移動ベクトル
 	Vector3 move = { 0,0,0 };
 
@@ -78,6 +76,11 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
+	//行列を定数バッファに転送
+	worldTransform_.TransferMatrix();
+	//ワールドトランスフォームの更新
+	worldTransform_.UpdateMatrix();
+
 	// キャラクターの座標を画面表示する処理
 	ImGui::Begin("Player pos");
 	// float3入力ボックス
@@ -92,7 +95,7 @@ void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//弾を生成し。初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initiaize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, worldTransform_.translation_);
 
 		//弾を登録する
 		bullet_ = newBullet;

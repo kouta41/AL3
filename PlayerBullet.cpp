@@ -4,12 +4,12 @@
 #include "WorldTransform.h"
 #include "TextureManager.h"
 #include <cassert>
-void PlayerBullet::Initiaize(Model* model, const Vector3& position) {
+void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 	//NULLポインタチェック
 	assert(model);
 	model_ = model;
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("block,png");
+	textureHandle_ = TextureManager::Load("block.png");
 
 	worldTransform_.Initialize();
 
