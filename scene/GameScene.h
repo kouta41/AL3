@@ -11,6 +11,7 @@
 #include"DebugCamera.h"
 
 #include "Player.h"
+#include"Enemy.h"
 
 /// <summary>
 /// ゲームシーン
@@ -51,6 +52,7 @@ private: // メンバ変数
 
 	// テクスチャハンドル
 	uint32_t playerTh_;
+	uint32_t enemyTh_;
 	//スプライト
 	Sprite* sprite_ = nullptr;
 	// 3Dモデル
@@ -59,6 +61,9 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 	// 自キャラ
 	Player* player_ = nullptr;
+
+	//敵キャラ
+	Enemy* enemy_ = nullptr;
 
 	//デバックカメラ有効
 	bool isDebugCameraActive_ = false;
