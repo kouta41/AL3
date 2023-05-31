@@ -1,25 +1,30 @@
-#include"PlayerBullet.h"
-#include"Input.h"
-#include "Model.h"
-#include "WorldTransform.h"
-#include "TextureManager.h"
-#include <cassert>
-void PlayerBullet::Initiaize(Model* model, const Vector3& position) {
-	//NULLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
+ï»¿#include"PlayerBullet.h"
+
+
+void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+	//NULLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
 	assert(model);
 	model_ = model;
-	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
-	textureHandle_ = TextureManager::Load("block,png");
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
+	textureHandle_ = TextureManager::Load("block.png");
 
 	worldTransform_.Initialize();
 
-	//ˆö”‚Åó‚¯æ‚Á‚½‰ŠúÀ•W‚ğƒZƒbƒg
+	//å› æ•°ã§å—ã‘å–ã£ãŸåˆæœŸåº§æ¨™ã‚’ã‚»ãƒƒãƒˆ
 	worldTransform_.translation_ = position;
+
+	//å› æ•°ã§å—ã‘å–ã£ãŸé€Ÿåº¦ã‚’ãƒ¡ãƒ³ãƒå¤‰æ•°ã«ä»£å…¥
+	velocity_ = velocity;
 
 }
 
 void PlayerBullet::Update() {
-	//ƒ[ƒ‹ƒhƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚ÌXV
+	//åº§æ¨™ã‚’ç§»å‹•ã•ã›ã‚‹ã€‚
+	worldTransform_.translation_.x += velocity_.x;
+	worldTransform_.translation_.y += velocity_.y;
+	worldTransform_.translation_.z += velocity_.z;
+
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®æ›´æ–°
 	worldTransform_.UpdateMatrix();
 }
 

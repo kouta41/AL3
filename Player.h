@@ -3,11 +3,20 @@
 #include "WorldTransform.h"
 #include"PlayerBullet.h"
 #include"Input.h"
+#include"MathFunction.h"
+#include"ImGuiManager.h"
 #include <cassert>
+#include<list>
 
 class Player {
 
 	public:
+		/// <summary>
+	///デストラクタ 
+	/// </summary>
+	~Player();
+
+
 	void Initialize(Model* model,uint32_t textureHandle);
 
 	void Update();
@@ -19,12 +28,13 @@ class Player {
 	/// </summary>
 	void Attack();
 
-	//キーボード入力
-	Input* input_ = nullptr;
-	//弾
-	PlayerBullet* bullet_ = nullptr;
-
 	private:
+
+		//キーボード入力
+		Input* input_ = nullptr;
+		//弾
+		std::list<PlayerBullet*> bullets_;
+
 		//ワールド変換データ
 	    WorldTransform worldTransform_;
 	    //モデル
@@ -32,5 +42,4 @@ class Player {
 		//テクスチャハンドル
 	    uint32_t textureHandle_ = 0u;
   
-
 };

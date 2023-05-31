@@ -1,25 +1,27 @@
 ﻿#include "Player.h"
-#include "TextureManager.h"
-#include "WorldTransform.h"
-#include "Vector3.h"
-#include "Matrix4x4.h"
-#include "ImGuiManager.h"
-#include <cmath>
-#include <cassert>
 
 
 
-void Player::Initialize(Model* model, uint32_t textureHandle) { 
+Player::~Player() {
+	//bullet_の解放
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
+}
+
+void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
 	textureHandle_ = textureHandle;
 	model_ = model;
 	worldTransform_.Initialize();
 	input_ = Input::GetInstance();
-	}
+}
 
 void Player::Update() {
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
+	//ワールドトランスフォームの更新
+	worldTransform_.UpdateMatrix();
 
 	//移動ベクトル
 	Vector3 move = { 0,0,0 };
@@ -58,15 +60,15 @@ void Player::Update() {
 	Attack();
 
 	//弾更新
-	if (bullet_) {
-		bullet_->Update();
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 	}
 
 	//座標移動（ベクトルの加算）
 	worldTransform_.translation_.x += move.x;
 	worldTransform_.translation_.y -= move.y;
 
-	
+
 
 	// 移動限界座標
 	const float kMoveLimitX = 34;
@@ -90,21 +92,27 @@ void Player::Update() {
 
 void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE)) {
+		//弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		//速度ベクトルを自機の向きに合わせて回転させる
+		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
 		//弾を生成し。初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initiaize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-		//弾を登録する
-		bullet_ = newBullet;
+		//弾を登録
+		bullets_.push_back(newBullet);
 	}
 }
 
 void Player::Draw(ViewProjection viewProjection_) {
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
-	//弾描画
-	if (bullet_) {
-		bullet_->Draw(viewProjection_);
+	// 弾描画
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection_);
 	}
 }
-

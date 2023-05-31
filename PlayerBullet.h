@@ -1,32 +1,36 @@
-#pragma once
+ï»¿#pragma once
 #include"Input.h"
 #include "Model.h"
 #include "WorldTransform.h"
+#include "TextureManager.h"
 #include <cassert>
 
 class PlayerBullet {
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
-	void Initiaize(Model* model,const Vector3& position);
+	void Initialize(Model* model,const Vector3& position,const Vector3& velocity);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
+
+	//é€Ÿåº¦
+	Vector3 velocity_;
 
 };
