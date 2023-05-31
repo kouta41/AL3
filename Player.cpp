@@ -40,7 +40,6 @@ void Player::Update() {
 		worldTransform_.rotation_.y -= kRotSpeed;
 	}
 
-
 	//押した方向で移動ベクトルを変更（左右）
 	if (input_->PushKey(DIK_LEFT)) {
 		move.x -= kCaracterSpeed;
@@ -67,8 +66,6 @@ void Player::Update() {
 	//座標移動（ベクトルの加算）
 	worldTransform_.translation_.x += move.x;
 	worldTransform_.translation_.y -= move.y;
-
-
 
 	// 移動限界座標
 	const float kMoveLimitX = 34;
