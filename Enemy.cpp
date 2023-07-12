@@ -69,6 +69,9 @@ void Enemy::Fire() {
 
 		assert(player_);
 
+		player_->GetWorldPosition();
+		GetWorldPosition();
+		Enemy::GetWorldPosition() = player_->GetWorldPosition() - worldTransform_.translation_;
 
 		EnemyBullet* newEnemyBullet = new EnemyBullet();
 		newEnemyBullet->Initialize(model_, worldTransform_.translation_, velocity);
@@ -91,9 +94,9 @@ Vector3 Enemy::GetWorldPosition() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 	//ワールド行列の平行移動成分を取得
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[1][0];
+	worldPos.y = worldTransform_.matWorld_.m[1][1];
+	worldPos.z = worldTransform_.matWorld_.m[1][2];
 
 	return worldPos;
 }
