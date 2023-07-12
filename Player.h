@@ -9,9 +9,8 @@
 #include<list>
 
 class Player {
-
 	public:
-		/// <summary>
+	/// <summary>
 	///デストラクタ 
 	/// </summary>
 	~Player();
@@ -27,6 +26,8 @@ class Player {
 	/// 攻撃
 	/// </summary>
 	void Attack();
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 	private:
 

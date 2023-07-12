@@ -1,21 +1,21 @@
-#include"Enemy.h"
+ï»¿#include"Enemy.h"
 
 Enemy::~Enemy() {
-	//Enemy‚Ì‰ğ•ú
+	//Enemyã®è§£æ”¾
 	for (EnemyBullet* EnemyBullet : Enemybullets_) {
 		delete EnemyBullet;
 	}
 }
 
 void Enemy::Initialize(Model* model, uint32_t textureHandle ) {
-	//NULLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
+	//NULLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
 	assert(model);
 	model_ = model;
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
 
-	//ˆö”‚Åó‚¯æ‚Á‚½‰ŠúÀ•W‚ğƒZƒbƒg
+	//å› æ•°ã§å—ã‘å–ã£ãŸåˆæœŸåº§æ¨™ã‚’ã‚»ãƒƒãƒˆ
 	worldTransform_.translation_ = { 25,3,100 };
 
 	RapidFire = 0;
@@ -23,22 +23,22 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle ) {
 }
 
 void Enemy::ApproachUpdate() {
-	//ˆÚ“®iƒxƒNƒgƒ‹‚ğ‰ÁZj
+	//ç§»å‹•ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ã‚’åŠ ç®—ï¼‰
 	worldTransform_.translation_.z -= velocity_.z;
-	//‹K’è‚ÌˆÊ’u‚Ü‚Å“’B‚µ‚½‚ç—£’E
+	//è¦å®šã®ä½ç½®ã¾ã§åˆ°é”ã—ãŸã‚‰é›¢è„±
 	if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
 	}
 }
 
 void Enemy::LeaveUpdate() {
-	//ˆÚ“®iƒxƒNƒgƒ‹‚ğ‰ÁZj
+	//ç§»å‹•ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ã‚’åŠ ç®—ï¼‰
 	worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.translation_.x -= velocity_.x;
 }
 
 void Enemy::Update() {
-	//ƒ[ƒ‹ƒhƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚ÌXV
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®æ›´æ–°
 	worldTransform_.UpdateMatrix();
 
 	switch (phase_) {
@@ -52,7 +52,7 @@ void Enemy::Update() {
 		break;
 	}
 	Fire();
-	//’e‚ÌXV
+	//å¼¾ã®æ›´æ–°
 	for (EnemyBullet* bullet : Enemybullets_) {
 		bullet->Update();
 	}
@@ -64,13 +64,16 @@ void Enemy::Fire() {
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
-		//‘¬“xƒxƒNƒgƒ‹‚ğ©‹@‚ÌŒü‚«‚É‡‚í‚¹‚Ä‰ñ“]‚³‚¹‚é
+		//é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã‚’è‡ªæ©Ÿã®å‘ãã«åˆã‚ã›ã¦å›è»¢ã•ã›ã‚‹
 		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+		assert(player_);
+
 
 		EnemyBullet* newEnemyBullet = new EnemyBullet();
 		newEnemyBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-		//’e‚ğ“o˜^
+		//å¼¾ã‚’ç™»éŒ²
 		Enemybullets_.push_back(newEnemyBullet);
 		RapidFire = 0;
 	}
@@ -78,8 +81,19 @@ void Enemy::Fire() {
 
 void Enemy::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-	// ’e•`‰æ
+	// å¼¾æç”»
 	for (EnemyBullet* bullet : Enemybullets_) {
 		bullet->Draw(viewProjection);
 	}
+}
+
+Vector3 Enemy::GetWorldPosition() {
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
+	Vector3 worldPos;
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
 }

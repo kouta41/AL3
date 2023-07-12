@@ -1,7 +1,8 @@
-#pragma once
+ï»¿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
 #include"EnemyBullet.h"
+#include"Player.h"
 #include"Input.h"
 #include"MathFunction.h"
 #include"ImGuiManager.h"
@@ -12,57 +13,64 @@ class Enemy {
 public:
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~Enemy();
 	/// <summary>
-	///  ‰Šú‰»
+	///  åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(Model* model, uint32_t textureHandle);
 	
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ƒtƒF[ƒY
+	/// ãƒ•ã‚§ãƒ¼ã‚º
 	/// </summary>
 	void ApproachUpdate();
 	void LeaveUpdate();
 
 	/// <summary>
-	/// UŒ‚
+	/// æ”»æ’ƒ
 	/// </summary>
 	void Fire();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
 	enum class Phase {
-		Approach,//Ú‹ß‚·‚é
+		Approach,//æ¥è¿‘ã™ã‚‹
 		Leave,//
 	};
 
+	void SetPlayer(Player* player) { player_ = player; }
+
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
+	Vector3 GetWorldPosition();
+
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//è‡ªã‚­ãƒ£ãƒ©
+	Player* player_ = nullptr;
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
 
-	//‘¬“x
+	//é€Ÿåº¦
 	Vector3 velocity_ = { 0.5,0.5,0.1 };
 
-	//ƒtƒF[ƒY
+	//ãƒ•ã‚§ãƒ¼ã‚º
 	Phase phase_ = Phase::Approach;
 
-	//’e
+	//å¼¾
 	std::list<EnemyBullet*> Enemybullets_;
 
-	//’e‚Ì˜AË‘¬“x
+	//å¼¾ã®é€£å°„é€Ÿåº¦
 	float RapidFire;
 };
