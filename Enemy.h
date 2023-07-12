@@ -1,12 +1,20 @@
 #pragma once
 #include "Model.h"
 #include "WorldTransform.h"
-#include "TextureManager.h"
+#include"EnemyBullet.h"
+#include"Input.h"
+#include"MathFunction.h"
+#include"ImGuiManager.h"
 #include <cassert>
+#include<list>
 
 class Enemy {
 public:
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Enemy();
 	/// <summary>
 	///  初期化
 	/// </summary>
@@ -18,11 +26,15 @@ public:
 	void Update();
 
 	/// <summary>
-	/// 
+	/// フェーズ
 	/// </summary>
 	void ApproachUpdate();
-
 	void LeaveUpdate();
+
+	/// <summary>
+	/// 攻撃
+	/// </summary>
+	void Fire();
 
 	/// <summary>
 	/// 描画
@@ -43,9 +55,14 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	//速度
-	Vector3 velocity_ = { 0.5,0.5,1 };
+	Vector3 velocity_ = { 0.5,0.5,0.1 };
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 
+	//弾
+	std::list<EnemyBullet*> Enemybullets_;
+
+	//弾の連射速度
+	float RapidFire;
 };

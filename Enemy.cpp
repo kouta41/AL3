@@ -1,5 +1,12 @@
 #include"Enemy.h"
 
+Enemy::~Enemy() {
+	//Enemyの解放
+	for (EnemyBullet* EnemyBullet : Enemybullets_) {
+		delete EnemyBullet;
+	}
+}
+
 void Enemy::Initialize(Model* model, uint32_t textureHandle ) {
 	//NULLポインタチェック
 	assert(model);
@@ -9,7 +16,10 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle ) {
 	worldTransform_.Initialize();
 
 	//因数で受け取った初期座標をセット
-	worldTransform_.translation_ = { 0,3,100 };
+	worldTransform_.translation_ = { 25,3,100 };
+
+	RapidFire = 0;
+	Fire();
 }
 
 void Enemy::ApproachUpdate() {
@@ -41,8 +51,35 @@ void Enemy::Update() {
 		LeaveUpdate();
 		break;
 	}
+	Fire();
+	//弾の更新
+	for (EnemyBullet* bullet : Enemybullets_) {
+		bullet->Update();
+	}
+}
+
+void Enemy::Fire() {
+	RapidFire++;
+	if (RapidFire > 60) {
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		//速度ベクトルを自機の向きに合わせて回転させる
+		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+		EnemyBullet* newEnemyBullet = new EnemyBullet();
+		newEnemyBullet->Initialize(model_, worldTransform_.translation_, velocity);
+
+		//弾を登録
+		Enemybullets_.push_back(newEnemyBullet);
+		RapidFire = 0;
+	}
 }
 
 void Enemy::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	// 弾描画
+	for (EnemyBullet* bullet : Enemybullets_) {
+		bullet->Draw(viewProjection);
+	}
 }
