@@ -52,6 +52,8 @@ public:
 	//ワールド座標を入れる変数
 	Vector3 GetWorldPosition();
 
+	Vector3 Normalize(const Vector3& v);
+
 private:
 	//自キャラ
 	Player* player_ = nullptr;

@@ -1,4 +1,5 @@
 ﻿#include"Enemy.h"
+#include"Player.h"
 
 Enemy::~Enemy() {
 	//Enemyの解放
@@ -61,7 +62,7 @@ void Enemy::Update() {
 void Enemy::Fire() {
 	RapidFire++;
 	if (RapidFire > 60) {
-		const float kBulletSpeed = 1.0f;
+		const float kBulletSpeed = 0.01f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
 		//速度ベクトルを自機の向きに合わせて回転させる
@@ -69,9 +70,17 @@ void Enemy::Fire() {
 
 		assert(player_);
 
-		player_->GetWorldPosition();
-		GetWorldPosition();
-		Enemy::GetWorldPosition() = player_->GetWorldPosition() - worldTransform_.translation_;
+		Vector3 end = player_->GetWorldPosition();
+		Vector3 start = GetWorldPosition();
+		Vector3 kyori;
+		kyori.x= end.x - start.x;
+		kyori.y = end.y - start.y;
+		kyori.z = start.z- end.z;
+		Normalize(kyori);
+		velocity.x = kyori.x *kBulletSpeed;
+		velocity.y = kyori.y  * kBulletSpeed;
+		velocity.z = kyori.z * kBulletSpeed;
+
 
 		EnemyBullet* newEnemyBullet = new EnemyBullet();
 		newEnemyBullet->Initialize(model_, worldTransform_.translation_, velocity);
@@ -90,13 +99,22 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 	}
 }
 
+Vector3  Enemy::Normalize(const Vector3& v) {
+	Vector3 normalize;
+	float mag = 1 / sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	normalize.x = v.x * mag;
+	normalize.y = v.y * mag;
+	normalize.z = v.z * mag;
+	return normalize;
+}
+
 Vector3 Enemy::GetWorldPosition() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 	//ワールド行列の平行移動成分を取得
-	worldPos.x = worldTransform_.matWorld_.m[1][0];
-	worldPos.y = worldTransform_.matWorld_.m[1][1];
-	worldPos.z = worldTransform_.matWorld_.m[1][2];
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }
