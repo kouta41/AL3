@@ -18,9 +18,21 @@ public:
 	void Update();
 
 	/// <summary>
+	/// 
+	/// </summary>
+	void ApproachUpdate();
+
+	void LeaveUpdate();
+
+	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
+
+	enum class Phase {
+		Approach,//接近する
+		Leave,//
+	};
 
 private:
 	//ワールド変換データ
@@ -31,5 +43,9 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	//速度
-	Vector3 velocity_ = { 0,0,1 };
+	Vector3 velocity_ = { 0.5,0.5,1 };
+
+	//フェーズ
+	Phase phase_ = Phase::Approach;
+
 };

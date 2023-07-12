@@ -6,6 +6,7 @@
 #include <cassert>
 
 class PlayerBullet {
+
 public:
 	/// <summary>
 	/// 初期化
