@@ -9,6 +9,7 @@
 #include <cassert>
 #include<list>
 
+class Player;
 class Enemy {
 public:
 
@@ -20,7 +21,7 @@ public:
 	///  初期化
 	/// </summary>
 	void Initialize(Model* model, uint32_t textureHandle);
-	
+
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -52,8 +53,16 @@ public:
 	//ワールド座標を入れる変数
 	Vector3 GetWorldPosition();
 
-	Vector3 Normalize(const Vector3& v);
+	/// <summary>
+	///衝突を検知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
 
+	//弾リストを取得
+	const std::list<EnemyBullet*>& GetBullets()const { return bullets_; }
+
+	//弾の発射間隔
+	static const int kFireInterval = 60;
 private:
 	//自キャラ
 	Player* player_ = nullptr;
@@ -71,8 +80,11 @@ private:
 	Phase phase_ = Phase::Approach;
 
 	//弾
-	std::list<EnemyBullet*> Enemybullets_;
+	std::list<EnemyBullet*> bullets_;
 
-	//弾の連射速度
-	float RapidFire;
+	
+	//発射タイマー
+	int32_t FireTimer = 10;
+	//接近フェーズ初期化
+	void Approach();
 };

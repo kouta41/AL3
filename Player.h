@@ -29,6 +29,14 @@ class Player {
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	/// <summary>
+	///衝突を検知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+
+	//弾リストを取得
+	const std::list<PlayerBullet*>& GetBullets()const { return bullets_; }
+
 	private:
 
 		//キーボード入力

@@ -210,3 +210,12 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 
 	return MakeAffineMatrix;
 }
+
+Vector3  Normalize(const Vector3& v) {
+	Vector3 normalize;
+	float mag = 1 / sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	normalize.x = v.x * mag;
+	normalize.y = v.y * mag;
+	normalize.z = v.z * mag;
+	return normalize;
+}

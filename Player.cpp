@@ -114,6 +114,10 @@ void Player::Draw(ViewProjection viewProjection_) {
 	}
 }
 
+void Player::OnCollision() {
+
+}
+
 Vector3 Player::GetWorldPosition() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
@@ -121,6 +125,5 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
-
 	return worldPos;
 }

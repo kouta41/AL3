@@ -21,3 +21,5 @@ Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2);
 Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 //  アフィン変換行列
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+//ワールド座標を取得
+Vector3 Normalize(const Vector3& v);

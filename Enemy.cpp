@@ -3,7 +3,7 @@
 
 Enemy::~Enemy() {
 	//Enemyの解放
-	for (EnemyBullet* EnemyBullet : Enemybullets_) {
+	for (EnemyBullet* EnemyBullet : bullets_) {
 		delete EnemyBullet;
 	}
 }
@@ -19,8 +19,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle ) {
 	//因数で受け取った初期座標をセット
 	worldTransform_.translation_ = { 25,3,100 };
 
-	RapidFire = 0;
-	Fire();
+	Approach();
 }
 
 void Enemy::ApproachUpdate() {
@@ -29,6 +28,14 @@ void Enemy::ApproachUpdate() {
 	//規定の位置まで到達したら離脱
 	if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
+	}
+	//発射タイマーをカウントダウン
+	FireTimer--;
+	if (FireTimer <= 0) {
+		//弾を発射
+		Fire();
+		//発射タイマーを初期化
+		FireTimer = kFireInterval;
 	}
 }
 
@@ -42,71 +49,65 @@ void Enemy::Update() {
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 
-	switch (phase_) {
-	case Phase::Approach:
-	default:
-		ApproachUpdate();
-		break;
+	
 
-	case Phase::Leave:
-		LeaveUpdate();
-		break;
-	}
-	Fire();
 	//弾の更新
-	for (EnemyBullet* bullet : Enemybullets_) {
+	for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
 	}
 }
 
 void Enemy::Fire() {
-	RapidFire++;
-	if (RapidFire > 60) {
-		const float kBulletSpeed = 0.01f;
-		Vector3 velocity(0, 0, kBulletSpeed);
 
-		//速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+	assert(player_);
 
-		assert(player_);
+	const float kBulletSpeed = 0.01f;
+	Vector3 velocity(0, 0, kBulletSpeed);
 
-		Vector3 end = player_->GetWorldPosition();
-		Vector3 start = GetWorldPosition();
-		Vector3 kyori;
-		kyori.x= end.x - start.x;
-		kyori.y = end.y - start.y;
-		kyori.z = start.z- end.z;
-		Normalize(kyori);
-		velocity.x = kyori.x *kBulletSpeed;
-		velocity.y = kyori.y  * kBulletSpeed;
-		velocity.z = kyori.z * kBulletSpeed;
+	//速度ベクトルを自機の向きに合わせて回転させる
+	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
 
-		EnemyBullet* newEnemyBullet = new EnemyBullet();
-		newEnemyBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-		//弾を登録
-		Enemybullets_.push_back(newEnemyBullet);
-		RapidFire = 0;
-	}
+	Vector3 end = player_->GetWorldPosition();
+	Vector3 start = GetWorldPosition();
+	Vector3 kyori;
+	kyori.x = end.x - start.x;
+	kyori.y = end.y - start.y;
+	kyori.z = start.z - end.z;
+	Normalize(kyori);
+	velocity.x = kyori.x * kBulletSpeed;
+	velocity.y = kyori.y * kBulletSpeed;
+	velocity.z = kyori.z * kBulletSpeed;
+
+
+	EnemyBullet* newEnemyBullet = new EnemyBullet();
+	newEnemyBullet->Initialize(model_, worldTransform_.translation_, velocity);
+
+	//弾を登録
+	bullets_.push_back(newEnemyBullet);
+
+
 }
 
 void Enemy::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 	// 弾描画
-	for (EnemyBullet* bullet : Enemybullets_) {
+	for (EnemyBullet* bullet : bullets_) {
 		bullet->Draw(viewProjection);
 	}
 }
 
-Vector3  Enemy::Normalize(const Vector3& v) {
-	Vector3 normalize;
-	float mag = 1 / sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	normalize.x = v.x * mag;
-	normalize.y = v.y * mag;
-	normalize.z = v.z * mag;
-	return normalize;
+void Enemy::Approach() {
+	//発射タイマーを初期化
+	FireTimer = kFireInterval;
 }
+
+void Enemy::OnCollision() {
+	
+}
+
+
 
 Vector3 Enemy::GetWorldPosition() {
 	//ワールド座標を入れる変数

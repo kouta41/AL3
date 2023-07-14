@@ -23,6 +23,15 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
+	/// <summary>
+	///衝突を検知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+
+
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
+
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
@@ -33,5 +42,8 @@ private:
 
 	//速度
 	Vector3 velocity_;
+
+	//衝突フラグ
+	//int Desufurg = 1;
 
 };
