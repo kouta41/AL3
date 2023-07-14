@@ -24,14 +24,20 @@ void PlayerBullet::Update() {
 	worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.translation_.z += velocity_.z;
 
+	//時間経過でデス
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 }
 
 void PlayerBullet::Draw(const ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	if (isDead_ == false) {
+		model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	}
 }
-
 Vector3 PlayerBullet::GetWorldPosition() {
 	Vector3 worldPos;
 	//ワールド行列の平行移動成分を取得
@@ -43,5 +49,5 @@ Vector3 PlayerBullet::GetWorldPosition() {
 }
 
 void PlayerBullet::OnCollision() {
-
+	isDead_ = true;
 }

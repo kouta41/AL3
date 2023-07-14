@@ -23,6 +23,9 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
+
+	bool IsDead() const { return isDead_; }
+
 	/// <summary>
 	///衝突を検知したら呼び出されるコールバック関数
 	/// </summary>
@@ -41,5 +44,17 @@ private:
 
 	//速度
 	Vector3 velocity_;
+
+	//一定時間で消す
+	static const int32_t kLifeTime = 60 ;
+	
+	//デスタイマー
+	int32_t deathTimer_ = kLifeTime;
+	// デスフラグ
+	bool isDead_ = false;
+
+	
+
+	Vector3 redius_ = { 1.0f,1.0f,1.0f };
 
 };

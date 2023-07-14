@@ -28,6 +28,7 @@ public:
 	/// </summary>
 	void OnCollision();
 
+	bool IsDead() const { return isDead_; }
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
@@ -43,7 +44,9 @@ private:
 	//速度
 	Vector3 velocity_;
 
-	//衝突フラグ
-	//int Desufurg = 1;
+	// デスフラグ
+	bool isDead_ = false;
+
+	Vector3 redius_ = { 1.0f,1.0f,1.0f };
 
 };

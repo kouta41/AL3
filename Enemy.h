@@ -87,4 +87,7 @@ private:
 	int32_t FireTimer = 10;
 	//接近フェーズ初期化
 	void Approach();
+
+	Vector3 redius_ = { 1.0f,1.0f,1.0f };
+
 };

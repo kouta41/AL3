@@ -49,7 +49,25 @@ void Enemy::Update() {
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 
-	
+	switch (phase_) {
+	case Phase::Approach:
+	default:
+		ApproachUpdate();
+		break;
+
+	case Phase::Leave:
+		LeaveUpdate();
+		break;
+	}
+
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		});
+
 
 	//弾の更新
 	for (EnemyBullet* bullet : bullets_) {

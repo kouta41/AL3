@@ -12,6 +12,8 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 
 	//因数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
+	
+
 
 	//因数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
@@ -29,7 +31,9 @@ void EnemyBullet::Update() {
 }
 
 void EnemyBullet::Draw(const ViewProjection& viewProjection) {
+	if (isDead_ == false) {
 		model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	}
 }
 
 
@@ -44,5 +48,5 @@ Vector3 EnemyBullet::GetWorldPosition() {
 }
 
 void EnemyBullet::OnCollision() {
-	//Desufurg = true;
+	isDead_ = true;
 }

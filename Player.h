@@ -51,4 +51,6 @@ class Player {
 		//テクスチャハンドル
 	    uint32_t textureHandle_ = 0u;
   
+		Vector3 redius_ = { 1.0f,1.0f,1.0f };
+
 };

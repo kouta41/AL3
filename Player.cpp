@@ -23,6 +23,15 @@ void Player::Update() {
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 
+
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		});
+
 	//移動ベクトル
 	Vector3 move = { 0,0,0 };
 
@@ -85,6 +94,8 @@ void Player::Update() {
 	ImGui::SliderFloat3("SliderFloat3", &worldTransform_.translation_.x, -18.0f, 1.0f);
 	ImGui::Text("PlayerBullet : Space");
 	ImGui::End();
+
+	
 }
 
 void Player::Attack() {

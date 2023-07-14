@@ -157,7 +157,7 @@ void GameScene::CheckAllCollisions() {
 		posC.z = (posA.z - posB.z) * (posA.z - posB.z);
 		
 		//球と球の当たり判定
-		if (posC.x + posC.y + posC.z <= (100 + 100) * (100 + 100)) {
+		if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
 			//自キャラがの衝突時コールバックを呼び出す
 			player_->OnCollision();
 			//敵弾の衝突時コールバックを呼び出す
@@ -182,7 +182,7 @@ void GameScene::CheckAllCollisions() {
 		posC.z = (posA.z - posB.z) * (posA.z - posB.z);
 
 		//球と球の当たり判定
-		if (posC.x + posC.y + posC.z <= (100 + 100) * (100 + 100)) {
+		if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
 			//自弾がの衝突時コールバックを呼び出す
 			bullet->OnCollision();
 			//敵キャラの衝突時コールバックを呼び出す
