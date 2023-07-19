@@ -85,8 +85,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		dxCommon->PreDraw();
 		// ゲームシーンの描画
 		gameScene->Draw();
-		//ゲームシーンの当たり判定
-		gameScene->CheckAllCollisions();
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
