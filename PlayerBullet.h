@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "TextureManager.h"
+#include"MathFunction.h"
 #include <cassert>
 
 class PlayerBullet {
