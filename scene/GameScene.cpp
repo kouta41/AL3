@@ -21,6 +21,9 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//デバックカメラの生成
+	debugCamera_ = new DebugCamera(1260, 700);
+
 	//ファイル名を指定してテクスチャを読み込む
 	playerTh_ = TextureManager::Load("FOX.png");
 	//テクスチャ読み込み
@@ -43,16 +46,9 @@ void GameScene::Initialize() {
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 
-	//3Dモデルの生成
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	//天球の生成
-	skydome_ = new Skydome();
-	//天球の初期化
-	skydome_->Init(modelSkydome_);
-	
-
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1260, 700);
+	
 	
 	// 軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
@@ -70,8 +66,7 @@ void GameScene::Update() {
 	skydome_->Update();
 	//デバイスを更新
 	debugCamera_->Update();
-
-	///当たり判定
+	//当たり判定
 	CheckAllCollisions();
 
 #ifdef _DEBUG
@@ -92,6 +87,9 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+
+	//当たり判定
+	CheckAllCollisions();
 
 }
 
