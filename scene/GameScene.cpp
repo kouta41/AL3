@@ -132,6 +132,9 @@ void GameScene::Draw() {
 }
 
 
+/// <summary>
+/// 衝突判定と応答
+/// </summary>
 void GameScene::CheckAllCollisions() {
 	//判定対象AとBの座標
 	Vector3 posA, posB, posC;
