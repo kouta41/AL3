@@ -93,6 +93,9 @@
     <ClCompile Include="PlayerBullet.cpp">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="skydome.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="skydome.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
