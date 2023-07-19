@@ -61,8 +61,14 @@ void GameScene::Update() {
 	CheckAllCollisions();
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_V)) {
 		isDebugCameraActive_ = true;
+	}
+#endif
+
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_B)) {
+		isDebugCameraActive_ = false;
 	}
 #endif
 
