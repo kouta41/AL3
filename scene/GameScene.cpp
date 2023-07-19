@@ -71,7 +71,7 @@ void GameScene::Update() {
 	//デバイスを更新
 	debugCamera_->Update();
 
-
+	///当たり判定
 	CheckAllCollisions();
 
 #ifdef _DEBUG

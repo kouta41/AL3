@@ -1,7 +1,6 @@
 #include"skydome.h"
 
 void Skydome::Init(Model* model) {
-	//assert(model_);
 	model_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 0.0f,0.0f,0.0f, };
