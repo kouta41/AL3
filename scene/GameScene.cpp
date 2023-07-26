@@ -46,6 +46,13 @@ void GameScene::Initialize() {
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 
+	//3Dモデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	//天球の生成
+	skydome_ = new Skydome();
+	//天球の初期化
+	skydome_->Init(modelSkydome_);
+
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1260, 700);
 	
@@ -70,10 +77,15 @@ void GameScene::Update() {
 	CheckAllCollisions();
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_V)) {
+	if (input_->PushKey(DIK_LALT)) {
 		isDebugCameraActive_ = true;
+	}
+	else {
+		isDebugCameraActive_ = false;
 
 	}
+
+
 #endif
 
 	// カメラの処理
