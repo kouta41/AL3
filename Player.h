@@ -29,6 +29,9 @@ class Player {
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	//
+	Vector3 GetRadius()const { return worldTransform_.rotation_; }
+
 	/// <summary>
 	///衝突を検知したら呼び出されるコールバック関数
 	/// </summary>

@@ -55,8 +55,15 @@ void GameScene::Initialize() {
 
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1260, 700);
+
+	//レールカメラの生成
+	railCamera_ = new RailCamera();
+	Vector3 pos = player_->GetWorldPosition();
+	Vector3 radius = player_->GetRadius();
+	//レールカメラの初期化
+	railCamera_->Init(pos, radius);
 	
-	
+
 	// 軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
@@ -69,12 +76,15 @@ void GameScene::Update() {
 	player_->Update();
 	//敵の更新
 	enemy_->Update();
+	//当たり判定
+	CheckAllCollisions();
 	//天球の更新
 	skydome_->Update();
 	//デバイスを更新
 	debugCamera_->Update();
-	//当たり判定
-	CheckAllCollisions();
+	//レールカメラの更新
+	railCamera_->Update();
+	
 
 #ifdef _DEBUG
 	if (input_->PushKey(DIK_LALT)) {
