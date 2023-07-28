@@ -4,6 +4,30 @@
 #include "Vector3.h"
 #include <cmath>
 
+struct Block {
+	Vector3 pos;
+	float radius;
+	int color;
+};
+
+struct Circle {
+	Vector3 center;     // 中心
+	float radius;       // 半径
+	float speed;        // 移動速度
+	unsigned int color; // 色
+};
+struct Capsule {
+	Vector3 start;
+	Vector3 end;
+	float radius;
+	unsigned int color; // 色
+};
+struct Line {
+	Vector3 start;
+	Vector3 end;
+	unsigned int color; // 色
+};
+
 // ベクトル変換
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
@@ -23,3 +47,19 @@ Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 //ワールド座標を取得
 Vector3 Normalize(const Vector3& v);
+
+Vector3 ToScreen(const Vector3* world);
+
+//float Dot(const Vector3* lhs, const Vector3* rhs) { return lhs->x * rhs->x + lhs->y * rhs->y; }
+
+void DrawCircle(const Circle* circle);
+
+void DrawLine(const Line* line);
+
+//Vector3 Perpendicular(const Vector3* vector) { return { -vector->y, vector->x }; }
+
+Vector3 Normalize(const Vector3* original);
+
+void DrawCapsule(const Capsule* capsule);
+
+Vector3 ClosestPoint(const Line* line, const Vector3* point);

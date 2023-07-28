@@ -1,6 +1,7 @@
 ﻿#include "MathFunction.h"
 
-
+float Dot(const Vector3* lhs, const Vector3* rhs) { return lhs->x * rhs->x + lhs->y * rhs->y; }
+Vector3 Perpendicular(const Vector3* vector) { return { -vector->y, vector->x }; }
 
 // ベクトル変換
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
@@ -218,4 +219,94 @@ Vector3  Normalize(const Vector3& v) {
 	normalize.y = v.y * mag;
 	normalize.z = v.z * mag;
 	return normalize;
+}
+
+
+Vector3 ToScreen(const Vector3* world) {
+	// 今回のワールド座標系からスクリーン座標系は
+	// 原点位置がyに500ずれていて、y軸が反転
+	const Vector3 kWorldToScreenTranslate = { 0.0f,0.f };
+	const Vector3 kWorldToScreenScale = { 1.0f, 1.0f };
+	return {
+	  (world->x * kWorldToScreenScale.x) + kWorldToScreenTranslate.x,
+	  (world->y * kWorldToScreenScale.y) + kWorldToScreenTranslate.y };
+}
+
+void DrawCircle(const Circle* circle) {
+	Vector3 screenCenter = ToScreen(&circle->center);
+}
+
+void DrawLine(const Line* line) {
+	Vector3 screenStart = ToScreen(&line->start);
+	Vector3 screenEnd = ToScreen(&line->end);
+}
+
+Vector3 Normalize(const Vector3* original) {
+	float dot = Dot(original, original);
+	Vector3 result = *original;
+	if (dot != 0.0f) {
+		float length = sqrtf(dot);
+		result.x /= length;
+		result.y /= length;
+	}
+	return result;
+}
+
+void DrawCapsule(const Capsule* capsule) {
+	Vector3 screenStart = ToScreen(&capsule->start);
+	Vector3 screenEnd = ToScreen(&capsule->end);
+
+#if DRAW_CAPSULE_ONE_LINE
+	Novice::DrawLine(
+		int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), capsule->color);
+#else
+	Vector3 toEnd = { capsule->end.x - capsule->start.x, capsule->end.y - capsule->start.y };
+	Vector3 unitVector = Normalize(&toEnd);
+	Vector3 perpendicular = Perpendicular(&unitVector);
+	Vector3 start1 = {
+	  capsule->start.x + perpendicular.x * capsule->radius,
+	  capsule->start.y + perpendicular.y * capsule->radius };
+	Vector3 start2 = {
+	  capsule->start.x - perpendicular.x * capsule->radius,
+	  capsule->start.y - perpendicular.y * capsule->radius };
+	Vector3 end1 = { start1.x + toEnd.x, start1.y + toEnd.y };
+	Vector3 end2 = { start2.x + toEnd.x, start2.y + toEnd.y };
+	start1 = ToScreen(&start1);
+	start2 = ToScreen(&start2);
+	end1 = ToScreen(&end1);
+	end2 = ToScreen(&end2);
+	
+
+#endif
+	
+}
+
+Vector3 Rotate(const Vector3* original, float angle) {
+	return {
+	  original->x * cosf(angle) - original->y * sinf(angle),
+	  original->y * cosf(angle) + original->x * sinf(angle) };
+}
+
+Vector3 ClosestPoint(const Line* line, const Vector3* point) {
+	// 直線のベクトル
+	Vector3 lineVector = { line->end.z - line->start.z, line->end.y - line->start.y };
+	float length = sqrtf(lineVector.z * lineVector.z + lineVector.y * lineVector.y);
+
+	// 単位ベクトル
+	Vector3 unitVector = lineVector;
+	if (length != 0.0f) {
+		unitVector.z = lineVector.z / length;
+		unitVector.y = lineVector.y / length;
+	}
+
+	// 始点からポイントへのベクトル
+	Vector3 toCenter = { point->z - line->start.z, point->y - line->start.y };
+
+	// 内積
+	float dot = toCenter.x * unitVector.x + toCenter.y * unitVector.y;
+
+	// 最近接点が円の内部にいるかどうかで判定
+	dot = fmaxf(0.0f, fminf(dot, length));
+	Vector3 closestPoint = { line->start.z + unitVector.z * dot, line->start.y + unitVector.y * dot };
+	return closestPoint;
 }

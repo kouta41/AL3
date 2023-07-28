@@ -26,6 +26,8 @@ void GameScene::Initialize() {
 
 	//ファイル名を指定してテクスチャを読み込む
 	playerTh_ = TextureManager::Load("FOX.png");
+	cameraTh_= TextureManager::Load("Camera.png");
+	blockTh_= TextureManager::Load("Camera.png");
 	//テクスチャ読み込み
 	enemyTh_ = TextureManager::Load("block.png");
 	sprite_ = Sprite::Create(playerTh_, {100, 50});
@@ -37,7 +39,7 @@ void GameScene::Initialize() {
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize(model_,playerTh_);
+	player_->Initialize(model_,playerTh_,cameraTh_);
 
 	//敵の生成
 	enemy_ = new Enemy();
@@ -45,6 +47,10 @@ void GameScene::Initialize() {
 	enemy_->Initialize(model_,enemyTh_);
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
+
+	//block
+	block_ = new block();
+	block_->Init(model_, blockTh_);
 
 	//3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -73,6 +79,8 @@ void GameScene::Update() {
 	skydome_->Update();
 	//デバイスを更新
 	debugCamera_->Update();
+	//block
+	block_->Update();
 	//当たり判定
 	CheckAllCollisions();
 
@@ -102,6 +110,8 @@ void GameScene::Update() {
 
 	//当たり判定
 	CheckAllCollisions();
+	//
+	CheckWallCollisions();
 
 }
 
@@ -141,6 +151,9 @@ void GameScene::Draw() {
 	//天球の描画
 	skydome_->Draw(viewProjection_);
 
+	//block
+	block_->Draw(viewProjection_);
+	
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -244,4 +257,35 @@ void GameScene::CheckAllCollisions() {
 		}
 	}
 #pragma endregion
+}
+
+
+void GameScene::CheckWallCollisions() {
+	//判定対象AとBの座標
+	Vector3 posA, posB, posC;
+	
+	
+	//当たり判定
+	posA = player_->GetWorldPosition();
+	posB = player_->GetWorldPosition1();
+	posC = block_->GetWorldPosition();
+
+	Vector3 rotatedVector = {
+		  kBaseVector.x * cosf(theta) - kBaseVector.y * sinf(theta),
+		  kBaseVector.y * cosf(theta) + kBaseVector.x * sinf(theta)
+	};
+	rotatedVector.x *= scale;
+	rotatedVector.y *= scale;
+
+	capsule.start = { posA };
+	capsule.end = { posB };
+	Line capsuleLine = { capsule.start, capsule.end };
+	Vector3 closestPoint = ClosestPoint(&capsuleLine, &posC);
+	Vector3 closestPointToCenter = {
+		posC.z- closestPoint.z, posC.y - closestPoint.y };
+	float sumRadius = 10 + capsule.radius;
+
+	if (dot(&closestPointToCenter, &closestPointToCenter) < sumRadius * sumRadius) {
+		player_->OnCollision();
+	}
 }
