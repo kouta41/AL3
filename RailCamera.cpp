@@ -1,30 +1,29 @@
-#include"RailCamera.h"
+ï»¿#include"RailCamera.h"
 
 
 void RailCamera::Init(Vector3 pos, Vector3 radius) {
 	worldTransform_.translation_ = pos;
 	worldTransform_.rotation_ = radius;
-	//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“‚Ì‰Šú‰»
+	//ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–
+	viewProjection_.farZ = 10000;
 	viewProjection_.Initialize();
 }
 
 
 void RailCamera::Update() {
-	//ˆÚ“®iƒxƒNƒgƒ‹‚ğ‰ÁZj
-	worldTransform_.translation_.y += velocity_.y;
-	worldTransform_.translation_.x -= velocity_.x;
-	worldTransform_.translation_.z -= velocity_.z;
-	//
-	worldTransform_.rotation_.x += velocity_.x;
-	worldTransform_.rotation_.y += velocity_.y;
-	worldTransform_.rotation_.z += velocity_.z;
-	worldTransform_.UpdateMatrix();
+	//ç§»å‹•ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ã‚’åŠ ç®—ï¼‰
+	
+	worldTransform_.translation_.z += velocity_.z;
+	
+	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
-	//ƒJƒƒ‰ƒIƒuƒWƒFƒNƒg‚Ìƒ[ƒ‹ƒhs—ñ‚©‚çƒrƒ…[s—ñ‚ğŒvZ‚·‚é
+	//ã‚«ãƒ¡ãƒ©ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‹ã‚‰ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã‚’è¨ˆç®—ã™ã‚‹
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 
-	//ƒJƒƒ‰‚ÌÀ•W‚ğ‰æ–Ê•\¦‚·‚é
+	//ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã‚’ç”»é¢è¡¨ç¤ºã™ã‚‹
 	ImGui::Begin("Camera");
-	ImGui::SliderFloat3("worldtransform", &worldTransform_.translation_.x, -18.0f, 1.0f);
+	ImGui::SliderFloat3("pos", &worldTransform_.translation_.x, -20.0f, 20.0f);
+	ImGui::SliderFloat3("rsdius", &worldTransform_.rotation_.x,-20.0f, 20.0f);
 
+	ImGui::End();
 }

@@ -16,7 +16,7 @@ class Player {
 	~Player();
 
 
-	void Initialize(Model* model,uint32_t textureHandle);
+	void Initialize(Model* model,uint32_t textureHandle,Vector3 playerPosition);
 
 	void Update();
 
@@ -40,6 +40,12 @@ class Player {
 	//弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets()const { return bullets_; }
 
+	/// <summary>
+	/// 親となるワールドトランスフォームをセット
+	/// </summary>
+	/// <param name="parent"></param>
+	void setParent(WorldTransform* parent);
+
 	private:
 
 		//キーボード入力
@@ -55,5 +61,6 @@ class Player {
 	    uint32_t textureHandle_ = 0u;
   
 		Vector3 redius_ = { 1.0f,1.0f,1.0f };
+
 
 };

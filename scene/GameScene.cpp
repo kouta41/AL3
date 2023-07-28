@@ -34,10 +34,18 @@ void GameScene::Initialize() {
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
+	//レールカメラの生成
+	railCamera_ = new RailCamera();
+	//レールカメラの初期化
+	railCamera_->Init({0,5,-15},{0,0,0});
+
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize(model_,playerTh_);
+	Vector3 playerPosition(0, 0, 30);
+	player_->Initialize(model_,playerTh_,playerPosition);
+	//自キャラとレールカメラの親子関係を結ぶ
+	player_->setParent(&railCamera_->GetworldTransform_());
 
 	//敵の生成
 	enemy_ = new Enemy();
@@ -56,12 +64,7 @@ void GameScene::Initialize() {
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1260, 700);
 
-	//レールカメラの生成
-	railCamera_ = new RailCamera();
-	Vector3 pos = player_->GetWorldPosition();
-	Vector3 radius = player_->GetRadius();
-	//レールカメラの初期化
-	railCamera_->Init(pos, radius);
+	
 	
 
 	// 軸方向表示の表示を有効にする
@@ -72,6 +75,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() { 
+	//レールカメラの更新
+	railCamera_->Update();
 	//自キャラの更新
 	player_->Update();
 	//敵の更新
@@ -82,8 +87,7 @@ void GameScene::Update() {
 	skydome_->Update();
 	//デバイスを更新
 	debugCamera_->Update();
-	//レールカメラの更新
-	railCamera_->Update();
+	
 	
 
 #ifdef _DEBUG
@@ -106,8 +110,11 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}
 	else {
-		// ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+
+		viewProjection_.matView = railCamera_->GetViewProjection_().matView;
+		viewProjection_.matProjection = railCamera_->GetViewProjection_().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
 	}
 
 	//当たり判定

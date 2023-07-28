@@ -27,7 +27,7 @@ struct WorldTransform {
 	// ローカル → ワールド変換行列
 	Matrix4x4 matWorld_;
 	// 親となるワールド変換へのポインタ
-	const WorldTransform* parent_ = nullptr;
+	WorldTransform* parent_;
 
 	/// <summary>
 	/// 初期化

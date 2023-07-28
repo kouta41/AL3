@@ -9,11 +9,12 @@ Player::~Player() {
 	}
 }
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
+void Player::Initialize(Model* model, uint32_t textureHandle,Vector3 playerPosition) {
 	assert(model);
 	textureHandle_ = textureHandle;
 	model_ = model;
 	worldTransform_.Initialize();
+	worldTransform_.translation_ = playerPosition;
 	input_ = Input::GetInstance();
 }
 
@@ -91,7 +92,7 @@ void Player::Update() {
 	// float3入力ボックス
 	ImGui::InputFloat3("InputFloat3", &worldTransform_.translation_.x);
 	// float3スライダー
-	ImGui::SliderFloat3("SliderFloat3", &worldTransform_.translation_.x, -18.0f, 1.0f);
+	ImGui::SliderFloat3("SliderFloat3", &worldTransform_.translation_.x, -100.0f, 100.0f);
 	ImGui::Text("PlayerBullet : Space");
 	ImGui::Text("DedugCamera : LALT");
 	ImGui::End();
@@ -138,4 +139,9 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 	return worldPos;
+}
+
+void Player::setParent(WorldTransform* parent) {
+	//親子関係を結ぶ
+	worldTransform_.parent_ = parent;
 }

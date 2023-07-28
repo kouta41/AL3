@@ -1,21 +1,21 @@
-#include"skydome.h"
+ï»¿#include"skydome.h"
 
 void Skydome::Init(Model* model) {
 	model_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 0.0f,0.0f,0.0f, };
-	worldTransform_.scale_ = { 100,100,100 };
+	worldTransform_.scale_ = { 1000,1000,1000 };
 
 }
 
 void Skydome::Update() {
-	//s—ñ‚ð’è”ƒoƒbƒtƒ@‚É“]‘—
+	//è¡Œåˆ—ã‚’å®šæ•°ãƒãƒƒãƒ•ã‚¡ã«è»¢é€
 	worldTransform_.TransferMatrix();
-	//ƒ[ƒ‹ƒhƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚ÌXV
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®æ›´æ–°
 	worldTransform_.UpdateMatrix();
 }
 
 void Skydome::Draw(ViewProjection viewProjection_) {
-	//3Dƒ‚ƒfƒ‹
+	//3Dãƒ¢ãƒ‡ãƒ«
 	model_->Draw(worldTransform_, viewProjection_);
 }

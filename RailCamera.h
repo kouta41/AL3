@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include"WorldTransform.h"
 #include"ViewProjection.h"
 #include"MathFunction.h"
@@ -7,21 +7,25 @@
 class RailCamera {
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Init(Vector3 pos,Vector3 radius);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
+	ViewProjection& GetViewProjection_() { return viewProjection_; }
+	WorldTransform& GetworldTransform_() { return worldTransform_; }
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
-	//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“
+	//ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
 	ViewProjection 	viewProjection_;
 
-	//‘¬“x
-	Vector3 velocity_ = { 0.0,0.0,0.1 };
+	//é€Ÿåº¦
+	Vector3 velocity_ = { 0.0,0.0,0.4 };
+
+
 };
