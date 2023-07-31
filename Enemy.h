@@ -9,10 +9,8 @@
 #include "Input.h"
 #include "MathFunction.h"
 #include "ImGuiManager.h"
-#include "GameScene.h"
 
 
-class GameScene;
 class Player;
 
 class Enemy {
@@ -63,11 +61,7 @@ public:
 	/// </summary>
 	void OnCollision();
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="gameScene"></param>
-	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 
 	//弾リストを取得
 	const std::list<EnemyBullet*>& GetBullets()const { return bullets_; }
@@ -75,8 +69,6 @@ private:
 
 	//自キャラ
 	Player* player_ = nullptr;
-	//ゲームシーン
-	GameScene* gameScene_ = nullptr;
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;
