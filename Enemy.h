@@ -1,15 +1,20 @@
 ﻿#pragma once
+#include <cassert>
+#include <list>
+
 #include "Model.h"
 #include "WorldTransform.h"
-#include"EnemyBullet.h"
-#include"Player.h"
-#include"Input.h"
-#include"MathFunction.h"
-#include"ImGuiManager.h"
-#include <cassert>
-#include<list>
+#include "EnemyBullet.h"
+#include "Player.h"
+#include "Input.h"
+#include "MathFunction.h"
+#include "ImGuiManager.h"
+#include "GameScene.h"
 
+
+class GameScene;
 class Player;
+
 class Enemy {
 public:
 
@@ -58,14 +63,21 @@ public:
 	/// </summary>
 	void OnCollision();
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="gameScene"></param>
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 	//弾リストを取得
 	const std::list<EnemyBullet*>& GetBullets()const { return bullets_; }
-
-	//弾の発射間隔
-	static const int kFireInterval = 60;
 private:
+
 	//自キャラ
 	Player* player_ = nullptr;
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
@@ -82,7 +94,9 @@ private:
 	//弾
 	std::list<EnemyBullet*> bullets_;
 
-	
+	//弾の発射間隔
+	static const int kFireInterval = 60;
+
 	//発射タイマー
 	int32_t FireTimer = 10;
 	//接近フェーズ初期化

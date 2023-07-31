@@ -11,9 +11,9 @@
 #include"DebugCamera.h"
 
 #include "Player.h"
-#include"Enemy.h"
-#include"skydome.h"
-#include"RailCamera.h"
+#include "Enemy.h"
+#include "skydome.h"
+#include "RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,6 +52,12 @@ public: // メンバ関数
 	/// </summary>
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	/// <param name="enemyBullet">敵弾</param>
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -68,8 +74,10 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 	// 自キャラ
 	Player* player_ = nullptr;
+
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
+	
 	//天球
 	Skydome* skydome_ = nullptr;
 	//3Dモデル
@@ -83,6 +91,7 @@ private: // メンバ変数
 	//レールカメラ
 	RailCamera* railCamera_ = nullptr;
 
+	
 
 	/// <summary>
 	/// ゲームシーン用
