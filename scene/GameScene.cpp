@@ -204,6 +204,10 @@ void GameScene::CheckAllCollisions() {
 			//敵弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
 		}
+		else
+		{
+			player_->NotOnCollision();
+		}
 	}
 #pragma endregion
 
@@ -225,7 +229,7 @@ void GameScene::CheckAllCollisions() {
 		//球と球の当たり判定
 		if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
 			//自弾がの衝突時コールバックを呼び出す
-			bullet->OnCollision();
+			//bullet->OnCollision();
 			//敵キャラの衝突時コールバックを呼び出す
 			enemy_->OnCollision();
 		}
@@ -268,16 +272,25 @@ void GameScene::CheckWallCollisions() {
 	//当たり判定
 	posA = player_->GetWorldPosition();
 	posB = player_->GetWorldPosition1();
-	posC = block_->GetWorldPosition();
 
-	Vector3 rotatedVector = {
+	if (posA.x >= 1 && posA.x <= 20) {
+		if (posA.z >= 8) {
+			player_->OnCollision();
+		}
+	}
+	else {
+	//	player_->NotOnCollision();
+	}
+
+
+	/*Vector3 rotatedVector = {
 		  kBaseVector.x * cosf(theta) - kBaseVector.y * sinf(theta),
 		  kBaseVector.y * cosf(theta) + kBaseVector.x * sinf(theta)
 	};
 	rotatedVector.x *= scale;
-	rotatedVector.y *= scale;
+	rotatedVector.y *= scale;*/
 
-	capsule.start = { posA };
+	/*capsule.start = { posA };
 	capsule.end = { posB };
 	Line capsuleLine = { capsule.start, capsule.end };
 	Vector3 closestPoint = ClosestPoint(&capsuleLine, &posC);
@@ -286,6 +299,9 @@ void GameScene::CheckWallCollisions() {
 	float sumRadius = 10 + capsule.radius;
 
 	if (dot(&closestPointToCenter, &closestPointToCenter) < sumRadius * sumRadius) {
-		player_->OnCollision();
+		player_->NotOnCollision();
 	}
+	else {
+		player_->OnCollision();
+	}*/
 }

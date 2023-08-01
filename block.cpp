@@ -13,7 +13,7 @@ void block::Init(Model* model, uint32_t textureHandle) {
 void block::Update() {
 	worldTransform_.scale_.x = 10;
 	worldTransform_.scale_.y = -10;
-
+	worldTransform_.translation_ = { 10,10,10 };
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 	//ワールドトランスフォームの更新

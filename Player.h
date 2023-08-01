@@ -36,6 +36,8 @@ class Player {
 	/// </summary>
 	void OnCollision();
 
+	void NotOnCollision();
+
 	//弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets()const { return bullets_; }
 
@@ -48,6 +50,7 @@ class Player {
 
 		//ワールド変換データ
 	    WorldTransform worldTransform_;
+
 		WorldTransform worldTransform1_;
 	    //モデル
 	    Model* model_ = nullptr;
@@ -61,6 +64,7 @@ class Player {
 		//移動ベクトル
 		Vector3 move = { 0,0,0 };
 		Vector3 movev2 = { 0,0,0 };
+		Vector3 movev3 = { 0,0,0 };
 
 
 		//キャラクターの移動の速さ

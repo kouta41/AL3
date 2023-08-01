@@ -45,6 +45,7 @@ void Player::Update() {
 	//移動ベクトル
 	Vector3 move = { 0,0,0 };
 	Vector3 movev2 = { 0,0,0 };
+	//Vector3 movev3 = { 0,0,0 };
 
 	int moveFlag = true;
 
@@ -140,9 +141,9 @@ void Player::Update() {
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
 	//Cameraにplayerを紐づけする
-	worldTransform1_.translation_.x += move.x +movev2.x;
-	worldTransform1_.translation_.y -= move.y + movev2.y;
-	worldTransform1_.translation_.z -= move.z - movev2.z;
+	worldTransform1_.translation_.x += move.x + movev2.x + movev3.x;
+	worldTransform1_.translation_.y -= move.y + movev2.y + movev3.y;
+	worldTransform1_.translation_.z -= move.z - movev2.z - movev3.z;
 	//Cameraにplayerを戻す
 	if (input_->PushKey(DIK_SPACE)) {
 		worldTransform1_.translation_.x = worldTransform_.translation_.x;
@@ -159,6 +160,8 @@ void Player::Update() {
 
 	// float3スライダー
 	ImGui::SliderFloat3("SliderFloat3", &worldTransform1_.translation_.x, -20.0f, 20.0f);
+	ImGui::SliderFloat3("SliderFloat3", &movev3.x, -20.0f, 20.0f);
+
 	ImGui::Text("PlayerBullet : Space");
 	ImGui::Text("DedugCamera : LALT");
 	ImGui::End();
@@ -196,11 +199,13 @@ void Player::Draw(ViewProjection viewProjection_) {
 }
 
 void Player::OnCollision() {
-	movev2.y += kCaracterSpeed;
-	movev2.z += kCaracterSpeed;
-
+	movev3.y += 0.01;
+	movev3.z += 0.01;
 }
 
+void Player::NotOnCollision() {
+	movev3 = { 0,0,0 };
+}
 Vector3 Player::GetWorldPosition() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
