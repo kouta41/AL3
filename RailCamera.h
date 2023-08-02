@@ -25,7 +25,7 @@ private:
 	ViewProjection 	viewProjection_;
 
 	//速度
-	Vector3 velocity_ = { 0.0,0.0,0.4 };
+	Vector3 velocity_ = { 0.0,0.0,0.0 };
 
 
 };
