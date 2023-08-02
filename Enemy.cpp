@@ -8,7 +8,7 @@ Enemy::~Enemy() {
 	}
 }
 
-void Enemy::Initialize(Model* model, uint32_t textureHandle ) {
+void Enemy::Initialize(Model* model, uint32_t textureHandle, Vector3 translation) {
 	//NULLポインタチェック
 	assert(model);
 	model_ = model;
@@ -16,8 +16,9 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle ) {
 
 	worldTransform_.Initialize();
 
+	worldTransform_.translation_ = translation;
+
 	//因数で受け取った初期座標をセット
-	worldTransform_.translation_ = { 25,3,100 };
 
 	Approach();
 }

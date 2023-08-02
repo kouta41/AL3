@@ -12,6 +12,7 @@
 
 
 class Player;
+class GameScene;
 
 class Enemy {
 public:
@@ -23,7 +24,7 @@ public:
 	/// <summary>
 	///  初期化
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 translation);
 
 	/// <summary>
 	/// 更新
@@ -61,7 +62,7 @@ public:
 	/// </summary>
 	void OnCollision();
 
-
+	void SetGameScene(GameScene* gameScene) { gamescene_ = gameScene; }
 
 	//弾リストを取得
 	const std::list<EnemyBullet*>& GetBullets()const { return bullets_; }
@@ -69,6 +70,7 @@ private:
 
 	//自キャラ
 	Player* player_ = nullptr;
+	GameScene* gamescene_ = nullptr;
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;
