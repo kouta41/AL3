@@ -8,6 +8,9 @@
 class EnemyBullet {
 
 public:
+
+
+	~EnemyBullet();
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -48,5 +51,8 @@ private:
 	bool isDead_ = false;
 
 	Vector3 redius_ = { 1.0f,1.0f,1.0f };
+
+
+	std::list<EnemyBullet*> bullets_;
 
 };

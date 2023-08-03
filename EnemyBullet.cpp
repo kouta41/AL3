@@ -1,6 +1,10 @@
 ﻿#include"EnemyBullet.h"
 
-
+EnemyBullet::~EnemyBullet() {
+	for (EnemyBullet* EnemyBullet : bullets_) {
+		delete EnemyBullet;
+	}
+}
 void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 	//NULLポインタチェック
 	assert(model);
