@@ -26,7 +26,7 @@ void GameScene::Initialize() {
 
 	//ファイル名を指定してテクスチャを読み込む
 	playerTh_ = TextureManager::Load("FOX.png");
-	cameraTh_= TextureManager::Load("Camera.png");
+	cameraTh_= TextureManager::Load("Camera1.png");
 	blockTh_= TextureManager::Load("Camera.png");
 	//テクスチャ読み込み
 	enemyTh_ = TextureManager::Load("block.png");
@@ -74,7 +74,7 @@ void GameScene::Update() {
 	//自キャラの更新
 	player_->Update();
 	//敵の更新
-	enemy_->Update();
+	//enemy_->Update();
 	//天球の更新
 	skydome_->Update();
 	//デバイスを更新
@@ -147,7 +147,7 @@ void GameScene::Draw() {
 	//自キャラの描画
 	player_->Draw(viewProjection_); 
 	//敵キャラの描画
-	enemy_->Draw(viewProjection_);
+	//enemy_->Draw(viewProjection_);
 	//天球の描画
 	skydome_->Draw(viewProjection_);
 
@@ -266,42 +266,70 @@ void GameScene::CheckAllCollisions() {
 
 void GameScene::CheckWallCollisions() {
 	//判定対象AとBの座標
-	Vector3 posA, posB, posC;
+	Vector3 posA, posB, posC, posD[15],posE;
 	
 	
 	//当たり判定
+	//player
 	posA = player_->GetWorldPosition();
+	//kabe
 	posB = player_->GetWorldPosition1();
 
-	if (posA.x >= 1 && posA.x <= 20) {
-		if (posA.z >= 8) {
-			player_->OnCollision();
+	posC = {0,0,10};
+
+	posD[0] = { (posA.x + posB.x) / 2,(posA.y + posB.y) / 2 ,(posA.z + posB.z) / 2 };
+
+	posD[1] = { (posD[0].x + posB.x) / 2,(posD[0].y + posB.y) / 2 ,(posD[0].z + posB.z) / 2 };
+
+	posD[2] = { (posD[0].x + posA.x) / 2,(posD[0].y + posA.y) / 2 ,(posD[0].z + posA.z) / 2 };
+
+	posD[3] = { (posD[1].x + posB.x) / 2,(posD[1].y + posB.y) / 2 ,(posD[1].z + posB.z) / 2 };
+
+	posD[4] = { (posD[2].x + posA.x) / 2,(posD[2].y + posA.y) / 2 ,(posD[2].z + posA.z) / 2 };
+
+	posD[5] = { (posD[0].x + posD[1].x) / 2,(posD[0].y + posD[1].y) / 2 ,(posD[0].z + posD[1].z) / 2};
+
+	posD[6] = { (posD[0].x + posD[2].x) / 2,(posD[0].y + posD[2].y) / 2 ,(posD[0].z + posD[2].z) / 2 };
+
+	posD[7] = { (posD[0].x + posD[5].x) / 2,(posD[0].y + posD[5].y) / 2 ,(posD[0].z + posD[5].z) / 2 };
+
+	posD[8] = { (posD[0].x + posD[6].x) / 2,(posD[0].y + posD[6].y) / 2 ,(posD[0].z + posD[6].z) / 2 };
+
+	posD[9] = { (posD[5].x + posD[1].x) / 2,(posD[5].y + posD[1].y) / 2 ,(posD[5].z + posD[1].z) / 2 };
+
+	posD[10] = { (posD[6].x + posD[2].x) / 2,(posD[6].y + posD[2].y) / 2 ,(posD[6].z + posD[2].z) / 2 };
+
+	posD[11] = { (posD[3].x + posD[1].x) / 2,(posD[3].y + posD[1].y) / 2 ,(posD[3].z + posD[1].z) / 2 };
+
+	posD[12] = { (posD[4].x + posD[2].x) / 2,(posD[4].y + posD[2].y) / 2 ,(posD[4].z + posD[2].z) / 2 };
+
+	posD[13] = { (posD[3].x + posB.x) / 2,(posD[3].y + posB.y) / 2 ,(posD[3].z + posB.z) / 2 };
+
+	posD[14] = { (posD[4].x + posA.x) / 2,(posD[4].y + posA.y) / 2 ,(posD[4].z + posA.z) / 2 };
+
+
+	ImGui::Begin("posD");
+
+	// float3スライダー
+	for (int i = 0; i < 15; i++) {
+		ImGui::InputFloat3("SliderFloat", &posD[i].x);
+	}
+	ImGui::End();
+
+	//座標AとBの距離を求める
+	for (int i = 0; i < 15; i++) {
+		for (int u = 0; u < 10; u++) {
+			//posC.x = (posD[i].x - posB.x) * (posD[i].x - posB.x);
+			posC.y = (posD[i].y -2 - u) * (posD[i].y -2  - u);
+			posC.z = (posD[i].z - 10) * (posD[i].z - 10);
+			
 		}
 	}
-	else {
-	//	player_->NotOnCollision();
+	if (posC.y + posC.z <= (5 + 1) * (1 + 1)) {
+		player_->OnCollision();
 	}
-
-
-	/*Vector3 rotatedVector = {
-		  kBaseVector.x * cosf(theta) - kBaseVector.y * sinf(theta),
-		  kBaseVector.y * cosf(theta) + kBaseVector.x * sinf(theta)
-	};
-	rotatedVector.x *= scale;
-	rotatedVector.y *= scale;*/
-
-	/*capsule.start = { posA };
-	capsule.end = { posB };
-	Line capsuleLine = { capsule.start, capsule.end };
-	Vector3 closestPoint = ClosestPoint(&capsuleLine, &posC);
-	Vector3 closestPointToCenter = {
-		posC.z- closestPoint.z, posC.y - closestPoint.y };
-	float sumRadius = 10 + capsule.radius;
-
-	if (dot(&closestPointToCenter, &closestPointToCenter) < sumRadius * sumRadius) {
+	else {
 		player_->NotOnCollision();
 	}
-	else {
-		player_->OnCollision();
-	}*/
+
 }

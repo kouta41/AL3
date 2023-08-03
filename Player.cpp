@@ -1,6 +1,8 @@
 ﻿#include "Player.h"
 
-
+float Player::easeInQuart(float x) {
+	return x * x * x * x ;
+}
 
 Player::~Player() {
 	//bullet_の解放
@@ -146,11 +148,24 @@ void Player::Update() {
 	worldTransform1_.translation_.z -= move.z - movev2.z - movev3.z;
 	//Cameraにplayerを戻す
 	if (input_->PushKey(DIK_SPACE)) {
-		worldTransform1_.translation_.x = worldTransform_.translation_.x;
-		worldTransform1_.translation_.y = worldTransform_.translation_.y + 5;
-		worldTransform1_.translation_.z = worldTransform_.translation_.z - 10;
+		//worldTransform1_.translation_.x = worldTransform_.translation_.x;
+		//worldTransform1_.translation_.y = worldTransform_.translation_.y + 5;
+		//worldTransform1_.translation_.z = worldTransform_.translation_.z - 10;
+		flag = true;
+		time = 0;
+		frame = 0;
 	}
+	if (flag == true) {
+		frame++;
+		worldTransform1_.translation_.x = worldTransform1_.translation_.x + (worldTransform_.translation_.x - worldTransform1_.translation_.x) * easeInQuart(frame / endFrame);
+		worldTransform1_.translation_.y = worldTransform1_.translation_.y + (worldTransform_.translation_.y+5 - worldTransform1_.translation_.y) * easeInQuart(frame / endFrame);
+		worldTransform1_.translation_.z = worldTransform1_.translation_.z + (worldTransform_.translation_.z-10 - worldTransform1_.translation_.z) * easeInQuart(frame / endFrame);
 
+
+	}if (frame >= 120) {
+		flag = false;
+		frame = 0;
+	}
 
 
 	// キャラクターの座標を画面表示する処理

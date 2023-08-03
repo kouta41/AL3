@@ -108,7 +108,7 @@ private: // メンバ変数
 	Capsule capsule = {
 	  {100.0f,  100.0f},
 	  {1000.0f, 400.0f},
-	  10.0f
+	  1.0f
 	};
 	float dot(const Vector3* lhs, const Vector3* rhs) { return lhs->x * rhs->x + lhs->y * rhs->y; }
 

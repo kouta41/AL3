@@ -290,12 +290,12 @@ Vector3 Rotate(const Vector3* original, float angle) {
 Vector3 ClosestPoint(const Line* line, const Vector3* point) {
 	// 直線のベクトル
 	Vector3 lineVector = { line->end.z - line->start.z, line->end.y - line->start.y };
-	float length = sqrtf(lineVector.z * lineVector.z + lineVector.y * lineVector.y);
+	float length = sqrtf(lineVector.x * lineVector.x + lineVector.y * lineVector.y);
 
 	// 単位ベクトル
 	Vector3 unitVector = lineVector;
 	if (length != 0.0f) {
-		unitVector.z = lineVector.z / length;
+		unitVector.x = lineVector.x / length;
 		unitVector.y = lineVector.y / length;
 	}
 

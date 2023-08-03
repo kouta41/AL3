@@ -42,6 +42,7 @@ class Player {
 	const std::list<PlayerBullet*>& GetBullets()const { return bullets_; }
 
 	private:
+		float easeInQuart(float x);
 
 		//キーボード入力
 		Input* input_ = nullptr;
@@ -72,4 +73,11 @@ class Player {
 
 		//回転速さ
 		const float kRotSpeed = 0.02f;
+
+		int start = 30;
+		double end = 1000;
+		double frame = 0;
+		int endFrame = 60;
+		int flag = false;
+		float time = 0;
 };
