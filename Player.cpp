@@ -141,7 +141,7 @@ void Player::Update() {
 	ImGui::InputFloat3("InputFloat3", &worldTransform_.translation_.x);
 	// float3スライダー
 	ImGui::SliderFloat3("SliderFloat3", &worldTransform_.translation_.x, -100.0f, 100.0f);
-	ImGui::SliderFloat3("GetWorldPosition3DReticle_().x", &worldTransform3DReticle_.translation_.x, -100.0f, 100.0f);
+	ImGui::SliderFloat3("GetWorldPosition3DReticle_", &worldTransform3DReticle_.translation_.x, -100.0f, 100.0f);
 
 	ImGui::Text("PlayerBullet : Space");
 	ImGui::Text("DedugCamera : LALT");
