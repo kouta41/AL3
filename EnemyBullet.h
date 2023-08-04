@@ -51,7 +51,11 @@ private:
 	bool isDead_ = false;
 
 	Vector3 redius_ = { 1.0f,1.0f,1.0f };
+	//一定時間で消す
+	static const int32_t kLifeTime = 60 * 3;
 
+	//デスタイマー
+	int32_t deathTimer_ = kLifeTime;
 
 	std::list<EnemyBullet*> bullets_;
 

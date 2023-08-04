@@ -35,6 +35,7 @@ public:
 	Vector3 GetWorldPosition();
 
 private:
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル

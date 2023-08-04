@@ -80,7 +80,7 @@ void Enemy::Fire() {
 
 	assert(player_);
 
-	const float kBulletSpeed = 0.01f;
+	const float kBulletSpeed = 0.04f;
 	Vector3 velocity(0, 0, kBulletSpeed);
 
 	//速度ベクトルを自機の向きに合わせて回転させる

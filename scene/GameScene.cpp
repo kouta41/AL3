@@ -41,6 +41,8 @@ void GameScene::Initialize() {
 	//テクスチャ読み込み
 	enemyTh_ = TextureManager::Load("block.png");
 	sprite_ = Sprite::Create(playerTh_, {100, 50});
+	textureReticle_ = TextureManager::Load("point.png");
+
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	// ビュープロジェクションの初期化
@@ -55,7 +57,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	//自キャラの初期化
 	Vector3 playerPosition(0, -5, 30);
-	player_->Initialize(model_,playerTh_,playerPosition);
+	player_->Initialize(model_,playerTh_, textureReticle_,playerPosition);
 	//自キャラとレールカメラの親子関係を結ぶ
 	player_->setParent(&railCamera_->GetworldTransform_());
 
@@ -88,7 +90,9 @@ void GameScene::Update() {
 	player_->Update();
 	
 	UpdateEnemyPopCommands();
-	
+	//当たり判定
+	CheckAllCollisions();
+
 	//敵キャラの更新
 	for (Enemy* enemy : enemys_) {
 		enemy->Update();
@@ -109,8 +113,7 @@ void GameScene::Update() {
 		});
 
 
-	//当たり判定
-	CheckAllCollisions();
+	
 	//天球の更新
 	skydome_->Update();
 	//デバイスを更新
@@ -145,8 +148,6 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}
 
-	//当たり判定
-	CheckAllCollisions();
 
 }
 
@@ -163,7 +164,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -206,6 +206,8 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
+	player_->DrawUI();
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -236,7 +238,7 @@ void GameScene::CheckAllCollisions() {
 		posC.x = (posA.x - posB.x) * (posA.x - posB.x);
 		posC.y = (posA.y - posB.y) * (posA.y - posB.y);
 		posC.z = (posA.z - posB.z) * (posA.z - posB.z);
-		
+
 		//球と球の当たり判定
 		if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
 			//自キャラがの衝突時コールバックを呼び出す

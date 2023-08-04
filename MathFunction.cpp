@@ -264,3 +264,77 @@ Vector3 Add(const Vector3& v1, const Vector3& v2) {
 	add.z = v1.z + v2.z;
 	return add;
 }
+
+
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth){
+	Matrix4x4 MakeViewportMatrix;
+	MakeViewportMatrix.m[0][0] = width / 2;
+	MakeViewportMatrix.m[0][1] = 0;
+	MakeViewportMatrix.m[0][2] = 0;
+	MakeViewportMatrix.m[0][3] = 0;
+
+	MakeViewportMatrix.m[1][0] = 0;
+	MakeViewportMatrix.m[1][1] = -height / 2;
+	MakeViewportMatrix.m[1][2] = 0;
+	MakeViewportMatrix.m[1][3] = 0;
+
+	MakeViewportMatrix.m[2][0] = 0;
+	MakeViewportMatrix.m[2][1] = 0;
+	MakeViewportMatrix.m[2][2] = maxDepth - minDepth;
+	MakeViewportMatrix.m[2][3] = 0;
+
+	MakeViewportMatrix.m[3][0] = (width / 2) + left;
+	MakeViewportMatrix.m[3][1] = (height / 2) + top;
+	MakeViewportMatrix.m[3][2] = minDepth;
+	MakeViewportMatrix.m[3][3] = 1;
+
+	return MakeViewportMatrix;
+}
+
+
+//2.正射影行列
+Matrix4x4 MakOrthographicMatrix(float left, float right, float top, float bottom, float nearClip, float farClip) {
+	Matrix4x4 MakOrthographicMatrix;
+	MakOrthographicMatrix.m[0][0] = 2 / (right - left);
+	MakOrthographicMatrix.m[0][1] = 0;
+	MakOrthographicMatrix.m[0][2] = 0;
+	MakOrthographicMatrix.m[0][3] = 0;
+
+	MakOrthographicMatrix.m[1][0] = 0;
+	MakOrthographicMatrix.m[1][1] = 2 / (top - bottom);
+	MakOrthographicMatrix.m[1][2] = 0;
+	MakOrthographicMatrix.m[1][3] = 0;
+
+	MakOrthographicMatrix.m[2][0] = 0;
+	MakOrthographicMatrix.m[2][1] = 0;
+	MakOrthographicMatrix.m[2][2] = 1 / (farClip - nearClip);
+	MakOrthographicMatrix.m[2][3] = 0;
+
+	MakOrthographicMatrix.m[3][0] = (left - right) / (left - right);
+	MakOrthographicMatrix.m[3][1] = (top + bottom) / (bottom - top);
+	MakOrthographicMatrix.m[3][2] = farClip / (nearClip - farClip);
+	MakOrthographicMatrix.m[3][3] = 1;
+
+	return MakOrthographicMatrix;
+}
+
+
+//3座標変換
+Vector3 Transform(const Vector3& vecter, const Matrix4x4& matrix) {
+	Vector3 Transform;
+	Transform.x = vecter.x * matrix.m[0][0] + vecter.y * matrix.m[1][0] +
+		vecter.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
+	Transform.y = vecter.x * matrix.m[0][1] + vecter.y * matrix.m[1][1] +
+		vecter.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
+	Transform.z = vecter.x * matrix.m[0][2] + vecter.z * matrix.m[1][2] +
+		vecter.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
+	float w = vecter.x * matrix.m[0][3] + vecter.y * matrix.m[1][3] + vecter.z * matrix.m[2][3] +
+		1.0f * matrix.m[3][3];
+
+	assert(w != 0.0f);
+
+	Transform.x /= w;
+	Transform.y /= w;
+	Transform.z /= w;
+	return Transform;
+}

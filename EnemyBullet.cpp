@@ -29,15 +29,27 @@ void EnemyBullet::Update() {
 	worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.translation_.z -= velocity_.z;
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		});
+
+	//時間経過でデス
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+
 
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 }
 
 void EnemyBullet::Draw(const ViewProjection& viewProjection) {
-	if (isDead_ == false) {
 		model_->Draw(worldTransform_, viewProjection, textureHandle_);
-	}
+	
 }
 
 
@@ -51,6 +63,4 @@ Vector3 EnemyBullet::GetWorldPosition() {
 	return worldPos;
 }
 
-void EnemyBullet::OnCollision() {
-	isDead_ = true;
-}
+void EnemyBullet::OnCollision() { isDead_ = true; }

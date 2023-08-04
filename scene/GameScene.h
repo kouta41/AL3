@@ -80,6 +80,7 @@ private: // メンバ変数
 	// テクスチャハンドル
 	uint32_t playerTh_;
 	uint32_t enemyTh_;
+	uint32_t textureReticle_;
 	//スプライト
 	Sprite* sprite_ = nullptr;
 	// 3Dモデル
