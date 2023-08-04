@@ -32,7 +32,6 @@ class Player {
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
-	Vector3 GetWorldPosition3DReticle_();
 
 
 	//
@@ -52,10 +51,7 @@ class Player {
 	/// <param name="parent"></param>
 	void setParent(WorldTransform* parent);
 
-	/// <summary>
-	/// UI描画
-	/// </summary>
-	void DrawUI();
+	
 
 	private:
 
@@ -63,7 +59,7 @@ class Player {
 		Input* input_ = nullptr;
 		//弾
 		std::list<PlayerBullet*> bullets_;
-
+		
 		//ワールド変換データ
 	    WorldTransform worldTransform_;
 	    //モデル
@@ -73,12 +69,7 @@ class Player {
   
 		Vector3 redius_ = { 1.0f,1.0f,1.0f };
 
-		//3Dレティクル用のワールドトランスフォーム
-		WorldTransform worldTransform3DReticle_;
+		
 
-		//2Dレティクル用スプライト
-		Sprite* sprite2DReticle_ = nullptr;
-		uint32_t textureReticle_ = NULL;
-
-		ViewProjection viewProjection;
+		
 };
