@@ -20,7 +20,7 @@ class Player {
 
 	void Initialize(Model* model,uint32_t textureHandle, uint32_t textureReticle,Vector3 playerPosition);
 
-	void Update();
+	void Update(const ViewProjection &viewProjection);
 
 	void Draw(ViewProjection);
 
@@ -32,7 +32,7 @@ class Player {
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
-
+	Vector3 GetWorldPosition3D();
 
 	//
 	Vector3 GetRadius()const { return worldTransform_.rotation_; }
@@ -51,8 +51,10 @@ class Player {
 	/// <param name="parent"></param>
 	void setParent(WorldTransform* parent);
 
-	
-
+	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
 	private:
 
 		//キーボード入力
@@ -62,6 +64,8 @@ class Player {
 		
 		//ワールド変換データ
 	    WorldTransform worldTransform_;
+		//3Dレティクル用ワールドトランスフォーム
+		WorldTransform worldTransform3DReticle_;
 	    //モデル
 	    Model* model_ = nullptr;
 		//テクスチャハンドル
@@ -69,7 +73,11 @@ class Player {
   
 		Vector3 redius_ = { 1.0f,1.0f,1.0f };
 
-		
+		Vector3 positionReticle;
+		// 2Dレティクル用スプライト
+		Sprite* sprite2DReicle_ = nullptr;
+
+		//ViewProjection viewProjection;
 
 		
 };

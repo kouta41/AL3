@@ -326,7 +326,7 @@ Vector3 Transform(const Vector3& vecter, const Matrix4x4& matrix) {
 		vecter.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
 	Transform.y = vecter.x * matrix.m[0][1] + vecter.y * matrix.m[1][1] +
 		vecter.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
-	Transform.z = vecter.x * matrix.m[0][2] + vecter.z * matrix.m[1][2] +
+	Transform.z = vecter.x * matrix.m[0][2] + vecter.y * matrix.m[1][2] +
 		vecter.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
 	float w = vecter.x * matrix.m[0][3] + vecter.y * matrix.m[1][3] + vecter.z * matrix.m[2][3] +
 		1.0f * matrix.m[3][3];

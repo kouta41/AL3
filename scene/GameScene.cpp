@@ -51,12 +51,12 @@ void GameScene::Initialize() {
 	//レールカメラの生成
 	railCamera_ = new RailCamera();
 	//レールカメラの初期化
-	railCamera_->Init({0,5,-15},{0,0,0});
+	railCamera_->Init({0,5,-50},{0,0,0});
 
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	Vector3 playerPosition(0, -5, 30);
+	Vector3 playerPosition(0, 0, 25);
 	player_->Initialize(model_,playerTh_, textureReticle_,playerPosition);
 	//自キャラとレールカメラの親子関係を結ぶ
 	player_->setParent(&railCamera_->GetworldTransform_());
@@ -87,7 +87,7 @@ void GameScene::Update() {
 	//レールカメラの更新
 	railCamera_->Update();
 	//自キャラの更新
-	player_->Update();
+	player_->Update(viewProjection_);
 	
 	UpdateEnemyPopCommands();
 	//当たり判定
@@ -206,6 +206,7 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
+	player_->DrawUI();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
