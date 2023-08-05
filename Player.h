@@ -79,5 +79,6 @@ class Player {
 
 		//ViewProjection viewProjection;
 
-		
+		Vector3 posNear ;
+		Vector3 posFor;
 };
