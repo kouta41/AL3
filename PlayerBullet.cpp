@@ -6,7 +6,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	assert(model);
 	model_ = model;
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("block.png");
+	textureHandle_ = TextureManager::Load("gooru.png");
 
 	worldTransform_.Initialize();
 
