@@ -2,6 +2,8 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "TextureManager.h"
+#include "ImGuiManager.h"
+
 #include <cassert>
 
 class Enemy {
@@ -47,5 +49,8 @@ private:
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
+
+	//メンバ関数ポインタのテーブル
+	static void (Enemy::* phasePFuncTable[])();
 
 };

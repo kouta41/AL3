@@ -52,7 +52,9 @@ void GameScene::Update() {
 	//自キャラの更新
 	player_->Update();
 	//敵の更新
-	enemy_->Update();
+	if (enemy_ != nullptr) {
+		enemy_->Update();
+	}
 	//デバイスを更新
 	debugCamera_->Update();
 

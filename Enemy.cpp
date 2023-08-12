@@ -27,20 +27,22 @@ void Enemy::LeaveUpdate() {
 	worldTransform_.translation_.x -= velocity_.x;
 }
 
+//staticで宣言したメンバ関数ポインタテーブルの実態
+void(Enemy::*Enemy::phasePFuncTable[])() = { &Enemy::ApproachUpdate,&Enemy::LeaveUpdate };
+
 void Enemy::Update() {
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 
-	switch (phase_) {
-	case Phase::Approach:
-	default:
-		ApproachUpdate();
-		break;
+	//メンバ関数ポインタに入ってる関数を呼び出す
+	(this->*phasePFuncTable[static_cast<size_t>(phase_)])();
 
-	case Phase::Leave:
-		LeaveUpdate();
-		break;
-	}
+	ImGui::Begin("Enemy pos");
+	// float3入力ボックス
+	ImGui::InputFloat3("InputFloat3", &worldTransform_.translation_.x);
+	// float3スライダー
+	ImGui::SliderFloat3("SliderFloat3", &worldTransform_.translation_.x, -18.0f, 1.0f);
+	ImGui::End();
 }
 
 void Enemy::Draw(const ViewProjection& viewProjection) {
