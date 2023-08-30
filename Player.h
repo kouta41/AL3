@@ -1,12 +1,14 @@
 ﻿#pragma once
+#include <Sprite.h>
+#include <list>
+#include <cassert>
+
 #include "Model.h"
 #include "WorldTransform.h"
-#include"PlayerBullet.h"
-#include"Input.h"
-#include"MathFunction.h"
-#include"ImGuiManager.h"
-#include <cassert>
-#include<list>
+#include "PlayerBullet.h"
+#include "Input.h"
+#include "MathFunction.h"
+#include "ImGuiManager.h"
 
 class Player {
 	public:
@@ -18,7 +20,7 @@ class Player {
 
 	void Initialize(Model* model,uint32_t textureHandle,Vector3 playerPosition);
 
-	void Update();
+	void Update(const ViewProjection& viewProjection);
 
 	void Draw(ViewProjection);
 
@@ -28,6 +30,9 @@ class Player {
 	void Attack();
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
+
+	Vector3 GetWorldPosition3D();
+
 
 	//
 	Vector3 GetRadius()const { return worldTransform_.rotation_; }
@@ -46,6 +51,12 @@ class Player {
 	/// <param name="parent"></param>
 	void setParent(WorldTransform* parent);
 
+
+	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
+
 	private:
 
 		//キーボード入力
@@ -54,13 +65,18 @@ class Player {
 		std::list<PlayerBullet*> bullets_;
 
 		//ワールド変換データ
-	    WorldTransform worldTransform_;
-	    //モデル
-	    Model* model_ = nullptr;
+		WorldTransform worldTransform_;
+		//3Dレティクル用ワールドトランスフォーム
+		WorldTransform worldTransform3DReticle_;
+		//モデル
+		Model* model_ = nullptr;
 		//テクスチャハンドル
-	    uint32_t textureHandle_ = 0u;
-  
+		uint32_t textureHandle_ = 0u;
+
 		Vector3 redius_ = { 1.0f,1.0f,1.0f };
 
+		Vector3 positionReticle;
+		// 2Dレティクル用スプライト
+		Sprite* sprite2DReicle_ = nullptr;
 
 };

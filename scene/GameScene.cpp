@@ -83,7 +83,7 @@ void GameScene::Update() {
 	//レールカメラの更新
 	railCamera_->Update();
 	//自キャラの更新
-	player_->Update();
+	player_->Update(viewProjection_);
 	//敵の更新
 	enemy_->Update();
 	//当たり判定
@@ -174,7 +174,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-
+	/// 
+	player_->DrawUI();
+	
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -259,7 +261,7 @@ void GameScene::CheckAllCollisions() {
 			posC.z = (posA.z - posB.z) * (posA.z - posB.z);
 
 			//球と球の当たり判定
-			if (posC.x + posC.y + posC.z <= (100 + 100) * (100 + 100)) {
+			if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
 				//自弾がの衝突時コールバックを呼び出す
 				playerbullet->OnCollision();
 				//敵弾の衝突時コールバックを呼び出す

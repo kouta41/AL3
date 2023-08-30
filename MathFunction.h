@@ -28,3 +28,13 @@ Vector3 Normalize(const Vector3& v);
 Matrix4x4 Inverse(const Matrix4x4& m);
 
 Vector3 Add(const Vector3& v1, const Vector3& v2);
+
+//ビューポート行列
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+
+
+//2.正射影行列
+Matrix4x4 MakOrthographicMatrix(float left, float right, float top, float bottom, float nearClip, float farClip);
+
+//3座標変換
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
