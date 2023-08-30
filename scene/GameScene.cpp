@@ -213,10 +213,7 @@ void GameScene::CheckAllCollisions() {
 			//敵弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
 		}
-		ImGui::Begin("OnCollision");
-		ImGui::Text("posA:(%+.2f,%+.2f,%+.2f)", posA.x, posA.y, posA.z);
-		ImGui::Text("posB:(%+.2f,%+.2f,%+.2f)", posB.x, posB.y, posB.z);
-		ImGui::End();
+
 	}
 #pragma endregion
 
