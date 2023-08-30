@@ -90,8 +90,6 @@ void GameScene::Update() {
 	player_->Update(viewProjection_);
 	
 	UpdateEnemyPopCommands();
-	//当たり判定
-	CheckAllCollisions();
 
 	//敵キャラの更新
 	for (Enemy* enemy : enemys_) {
@@ -113,6 +111,8 @@ void GameScene::Update() {
 		});
 
 
+	//当たり判定
+	CheckAllCollisions();
 	
 	//天球の更新
 	skydome_->Update();
