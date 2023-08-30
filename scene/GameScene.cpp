@@ -238,6 +238,7 @@ void GameScene::CheckAllCollisions() {
 	for (EnemyBullet* bullet : enemyBullets) {
 		collisionManager_->AddCollider(bullet);
 	}
+
 	collisionManager_->CheckAllCollisions();
 	collisionManager_->ClearCollider();
 }
