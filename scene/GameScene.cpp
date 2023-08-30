@@ -73,6 +73,8 @@ void GameScene::Initialize() {
 	//天球の初期化
 	skydome_->Init(modelSkydome_);
 
+	collisionManager_ = new CollisionManager();
+
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1260, 700);
 
@@ -217,99 +219,27 @@ void GameScene::Draw() {
 
 
 void GameScene::CheckAllCollisions() {
-	//判定対象AとBの座標
-	Vector3 posA, posB, posC;
-
-	//自弾リストの取得
+	// 自弾リストの取得
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
-	//敵弾リストの取得
+	// 敵弾リストの取得
 	const std::list<EnemyBullet*>& enemyBullets = enemyBullets_;
-
-	///自キャラと敵弾の当たり判定///
-#pragma region
-	//自キャラの座標
-	posA =player_->GetWorldPosition();
-
-	//自キャラと敵弾全ての当たり判定
-	for (EnemyBullet* bullet : enemyBullets) {
-		//敵弾の座標
-		posB = bullet->GetWorldPosition();
-
-		//座標AとBの距離を求める
-		posC.x = (posA.x - posB.x) * (posA.x - posB.x);
-		posC.y = (posA.y - posB.y) * (posA.y - posB.y);
-		posC.z = (posA.z - posB.z) * (posA.z - posB.z);
-
-
-
-		//球と球の当たり判定
-		if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
-			//自キャラがの衝突時コールバックを呼び出す
-			player_->OnCollision();
-			//敵弾の衝突時コールバックを呼び出す
-			bullet->OnCollision();
-		}
+	// 自機のコライダーを登録
+	collisionManager_->AddCollider(player_);
+	// 敵機のコライダーを登録
+	for (Enemy* enemy_ : enemys_) {
+		collisionManager_->AddCollider(enemy_);
 	}
-#pragma endregion
 
-	///自弾と敵キャラの当たり判定///
-#pragma region
-	
-
-
-	//自弾と敵キャラの当たり判定
+	// 自機の弾
 	for (PlayerBullet* bullet : playerBullets) {
-		for (Enemy* enemy : enemys_) {
-			//敵キャラの座標
-			posA = enemy->GetWorldPosition();
-			//自弾の座標
-			posB = bullet->GetWorldPosition();
-
-			//座標AとBの距離を求める
-			posC.x = (posA.x - posB.x) * (posA.x - posB.x);
-			posC.y = (posA.y - posB.y) * (posA.y - posB.y);
-			posC.z = (posA.z - posB.z) * (posA.z - posB.z);
-
-			//球と球の当たり判定
-			if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
-				//自弾がの衝突時コールバックを呼び出す
-				bullet->OnCollision();
-				//敵キャラの衝突時コールバックを呼び出す
-				enemy->OnCollision();
-			}
-			ImGui::Begin("OnCollision");
-			ImGui::Text("posA:(%+.2f,%+.2f,%+.2f)",posA.x, posA.y, posA.z);
-			ImGui::Text("posB:(%+.2f,%+.2f,%+.2f)", posB.x, posB.y, posB.z);
-			ImGui::End();
-		}
+		collisionManager_->AddCollider(bullet);
 	}
-#pragma endregion
-
-	///自弾と敵弾の当たり判定///
-#pragma region
-	//自弾と敵弾の当たり判定
-	for (PlayerBullet* playerbullet : playerBullets) {
-		for (EnemyBullet* enemybullet : enemyBullets) {
-			//自弾の座標
-			posA = playerbullet->GetWorldPosition();
-			//敵弾の座標
-			posB = enemybullet->GetWorldPosition();
-
-			//座標AとBの距離を求める
-			posC.x = (posA.x - posB.x) * (posA.x - posB.x);
-			posC.y = (posA.y - posB.y) * (posA.y - posB.y);
-			posC.z = (posA.z - posB.z) * (posA.z - posB.z);
-
-			//球と球の当たり判定
-			if (posC.x + posC.y + posC.z <= (100 + 100) * (100 + 100)) {
-				//自弾がの衝突時コールバックを呼び出す
-				playerbullet->OnCollision();
-				//敵弾の衝突時コールバックを呼び出す
-				enemybullet->OnCollision();
-			}
-		}
+	// 敵機の弾
+	for (EnemyBullet* bullet : enemyBullets) {
+		collisionManager_->AddCollider(bullet);
 	}
-#pragma endregion
+	collisionManager_->CheckAllCollisions();
+	collisionManager_->ClearCollider();
 }
 
 void GameScene::LoadEnemyPopData() {

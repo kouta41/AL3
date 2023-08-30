@@ -15,6 +15,8 @@
 #include "Enemy.h"
 #include "skydome.h"
 #include "RailCamera.h"
+#include "Collider.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// ゲームシーン
@@ -116,6 +118,9 @@ private: // メンバ変数
 
 	// 敵発生コマンド
 	std::stringstream enemyPopCommands;
+
+	//CorisionManager
+	CollisionManager* collisionManager_;
 
 	/// <summary>
 	/// ゲームシーン用
