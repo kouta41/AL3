@@ -240,6 +240,8 @@ void GameScene::CheckAllCollisions() {
 		posC.y = (posA.y - posB.y) * (posA.y - posB.y);
 		posC.z = (posA.z - posB.z) * (posA.z - posB.z);
 
+
+
 		//球と球の当たり判定
 		if (posC.x + posC.y + posC.z <= (1 + 1) * (1 + 1)) {
 			//自キャラがの衝突時コールバックを呼び出す
@@ -275,6 +277,10 @@ void GameScene::CheckAllCollisions() {
 				//敵キャラの衝突時コールバックを呼び出す
 				enemy->OnCollision();
 			}
+			ImGui::Begin("OnCollision");
+			ImGui::Text("posA:(%+.2f,%+.2f,%+.2f)",posA.x, posA.y, posA.z);
+			ImGui::Text("posB:(%+.2f,%+.2f,%+.2f)", posB.x, posB.y, posB.z);
+			ImGui::End();
 		}
 	}
 #pragma endregion
