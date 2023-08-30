@@ -88,11 +88,6 @@ void GameScene::Update() {
 	railCamera_->Update();
 	//自キャラの更新
 	player_->Update(viewProjection_);
-	
-	UpdateEnemyPopCommands();
-	//当たり判定
-	CheckAllCollisions();
-
 	//敵キャラの更新
 	for (Enemy* enemy : enemys_) {
 		enemy->Update();
@@ -102,6 +97,10 @@ void GameScene::Update() {
 	for (EnemyBullet* bullet : enemyBullets_) {
 		bullet->Update();
 	}
+	
+
+	UpdateEnemyPopCommands();
+
 
 	// デスフラグんお立った弾を排除
 	enemyBullets_.remove_if([](EnemyBullet* bullet) {
@@ -120,6 +119,8 @@ void GameScene::Update() {
 	debugCamera_->Update();
 	
 	
+	//当たり判定
+	//CheckAllCollisions();
 
 #ifdef _DEBUG
 	if (input_->PushKey(DIK_LALT)) {
