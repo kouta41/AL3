@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <cassert>
 #include <list>
+#include <time.h>
 
 #include "Model.h"
 #include "WorldTransform.h"
@@ -9,6 +10,7 @@
 #include "Input.h"
 #include "MathFunction.h"
 #include "ImGuiManager.h"
+
 
 
 class Player;
@@ -46,6 +48,13 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
+
+	/// <summary>
+	/// 位置替え
+	/// </summary>
+
+	void Rand();
+
 	enum class Phase {
 		Approach,//接近する
 		Leave,//
@@ -78,7 +87,7 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	//速度
-	Vector3 velocity_ = { 0.5,0.5,0.1 };
+	Vector3 velocity_ = { 0.5,0.5,0.6 };
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
@@ -95,5 +104,7 @@ private:
 	void Approach();
 
 	Vector3 redius_ = { 1.0f,1.0f,1.0f };
+
+	Vector3 randPos_;
 
 };

@@ -21,9 +21,9 @@ void RailCamera::Update() {
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 
 	//カメラの座標を画面表示する
-	ImGui::Begin("Camera");
-	ImGui::SliderFloat3("pos", &worldTransform_.translation_.x, -20.0f, 20.0f);
-	ImGui::SliderFloat3("rsdius", &worldTransform_.rotation_.x,-20.0f, 20.0f);
+	//ImGui::Begin("Camera");
+	//ImGui::SliderFloat3("pos", &worldTransform_.translation_.x, -20.0f, 20.0f);
+	//ImGui::SliderFloat3("rsdius", &worldTransform_.rotation_.x,-20.0f, 20.0f);
 
-	ImGui::End();
+	//ImGui::End();
 }

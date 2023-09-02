@@ -79,4 +79,8 @@ class Player {
 		// 2Dレティクル用スプライト
 		Sprite* sprite2DReicle_ = nullptr;
 
+
+		Vector3 posNear;
+		Vector3 posFor;
+
 };

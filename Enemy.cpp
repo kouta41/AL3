@@ -27,7 +27,7 @@ void Enemy::ApproachUpdate() {
 	worldTransform_.translation_.z -= velocity_.z;
 	//規定の位置まで到達したら離脱
 	if (worldTransform_.translation_.z < 0.0f) {
-		phase_ = Phase::Leave;
+		Rand();
 	}
 	//発射タイマーをカウントダウン
 	FireTimer--;
@@ -73,6 +73,11 @@ void Enemy::Update() {
 	for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
 	}
+	
+	//ImGui::Begin("rand pos");
+	//// float3入力ボックス
+	//ImGui::InputFloat3("InputFloat3", &randPos_.x);
+	//ImGui::End();
 }
 
 void Enemy::Fire() {
@@ -106,6 +111,16 @@ void Enemy::Fire() {
 	bullets_.push_back(newEnemyBullet);
 
 
+	
+}
+
+void Enemy::Rand() {
+	randPos_.x = rand() % 68 - 34;
+	randPos_.y = rand() % 36 - 18;
+	randPos_.z = rand() % 200 + 50;
+
+	worldTransform_.translation_ = { randPos_.x,randPos_.y,randPos_.z };
+
 }
 
 void Enemy::Draw(const ViewProjection& viewProjection) {
@@ -122,7 +137,8 @@ void Enemy::Approach() {
 }
 
 void Enemy::OnCollision() {
-	
+
+	Rand();
 }
 
 
