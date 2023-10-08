@@ -74,7 +74,7 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	//速度
-	Vector3 velocity_ = { 0.5,0.5,0.1 };
+	Vector3 velocity_ = { 0.5f,0.5f,0.1f };
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;

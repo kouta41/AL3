@@ -12,6 +12,14 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	return result;
 }
 
+Vector3 Transform_Move(const Vector3& translate, const Vector3& move) {
+	Vector3 result;
+	result.x = translate.x + move.x;
+	result.y = translate.y + move.y;
+	result.z = translate.z + move.z;
+	return result;
+};
+
 // 拡大縮小行列
 Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 	Matrix4x4 MakeScaleMatrix;

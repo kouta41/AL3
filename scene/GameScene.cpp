@@ -92,10 +92,15 @@ void GameScene::Update() {
 		isDebugCameraActive_ = false;
 
 	}
-
-
 #endif
 
+	if (input_->PushKey(DIK_LALT)) {
+		isDebugCameraActive_ = true;
+	}
+	else {
+		isDebugCameraActive_ = false;
+
+	}
 	// カメラの処理
 	if (isDebugCameraActive_) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
@@ -104,10 +109,13 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}
 	else {
+	
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-
+		viewProjection_.translation_ = { 0.0f,20.0f,-140.0f };
+		viewProjection_.rotation_ = { 0.3f,0.0f,0.0f };
+	
 	//当たり判定
 	CheckAllCollisions();
 	//
@@ -266,7 +274,7 @@ void GameScene::CheckAllCollisions() {
 
 void GameScene::CheckWallCollisions() {
 	//判定対象AとBの座標
-	Vector3 posA, posB, posC, posD[15],posE;
+	Vector3 posA, posB, posC, posD[15];
 	
 	
 	//当たり判定

@@ -31,6 +31,8 @@ struct Line {
 // ベクトル変換
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
+Vector3 Transform_Move(const Vector3& translate, const Vector3& move);
+
 // 拡大縮小行列
 Matrix4x4 MakeScaleMatrix(const Vector3& scale);
 // X軸周りの回転行列

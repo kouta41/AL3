@@ -73,6 +73,8 @@ class Player {
 
 		//回転速さ
 		const float kRotSpeed = 0.02f;
+		int moveFlag = true;
+		int moveFlag1 = true;
 
 		int start = 30;
 		double end = 1000;
@@ -80,4 +82,8 @@ class Player {
 		int endFrame = 60;
 		int flag = false;
 		float time = 0;
+
+		float powerSpeed = 0.01;
+		float Speed = 0;
+
 };

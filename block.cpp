@@ -1,4 +1,4 @@
-#include"block.h"
+ï»¿#include"block.h"
 
 
 void block::Init(Model* model, uint32_t textureHandle) {
@@ -14,23 +14,23 @@ void block::Update() {
 	worldTransform_.scale_.x = 10;
 	worldTransform_.scale_.y = -10;
 	worldTransform_.translation_ = { 10,10,10 };
-	//s—ñ‚ğ’è”ƒoƒbƒtƒ@‚É“]‘—
+	//è¡Œåˆ—ã‚’å®šæ•°ãƒãƒƒãƒ•ã‚¡ã«è»¢é€
 	worldTransform_.TransferMatrix();
-	//ƒ[ƒ‹ƒhƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚ÌXV
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®æ›´æ–°
 	worldTransform_.UpdateMatrix();
 }
 
 void block::Draw(ViewProjection viewProjection_) {
 	worldTransform_.scale_.x += 10;
 
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 }
 
 Vector3 block::GetWorldPosition() {
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
-	//ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];

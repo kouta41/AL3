@@ -20,9 +20,11 @@ void Player::Initialize(Model* model, uint32_t textureHandle, uint32_t textureHa
 	worldTransform_.Initialize();
 	worldTransform1_.Initialize();
 	input_ = Input::GetInstance();
-	worldTransform1_.translation_.x = worldTransform_.translation_.x ;
-	worldTransform1_.translation_.y = worldTransform_.translation_.y + 5;
-	worldTransform1_.translation_.z = worldTransform_.translation_.z - 10;
+	worldTransform_.translation_ = { 0,0,-110 };
+	worldTransform1_.translation_.x = worldTransform_.translation_.x +2;
+	worldTransform1_.translation_.y = worldTransform_.translation_.y + 2;
+	worldTransform1_.translation_.z = worldTransform_.translation_.z -2;
+	worldTransform1_.scale_ = { 0.5f,1.0f,0.5f };
 }
 
 void Player::Update() {
@@ -42,14 +44,61 @@ void Player::Update() {
 		}
 		return false;
 		});
+	worldTransform1_.translation_.x = worldTransform_.translation_.x + 2;
+	worldTransform1_.translation_.y = worldTransform_.translation_.y + 2;
+	worldTransform1_.translation_.z = worldTransform_.translation_.z - 2;
 
+	//powerSpeed += Speed;
+	if (worldTransform1_.scale_.y >= 3.0f) {
+		powerSpeed = powerSpeed * (-1);
+	}
+	else if (worldTransform1_.scale_.y <= 0.1f) {
+		powerSpeed = powerSpeed * (-1);
+	}
 
-	//移動ベクトル
-	Vector3 move = { 0,0,0 };
+	if (moveFlag1 == true) {
+		worldTransform1_.scale_.y += powerSpeed;
+	}
+	if (input_->PushKey(DIK_SPACE)) {
+		Speed = worldTransform1_.scale_.y - (worldTransform1_.scale_.y / 20);
+		moveFlag1 = false;
+	}
+
+	move = { 0,0,0 };
 	Vector3 movev2 = { 0,0,0 };
+	Vector3 movev3 = { 0, 0, Speed };
+
+	movev3 = Normalize(movev3);
+	movev3.x = Speed;
+	movev3.y = Speed;
+	movev3.z = Speed;
+	movev3 = TransformNormal(movev3, worldTransform_.matWorld_);
+
+
+	
+
+	if (moveFlag1 == false) {
+		Speed -= 0.025;
+		move.x += movev3.x;
+		move.y += movev3.y;
+		move.x += movev3.z;
+		if (Speed <= 0.00) {
+			Speed = 0.0f;
+			moveFlag1 = true;
+		}
+	}
+
+
+	
+
+	if (input_->PushKey(DIK_1)) {
+		worldTransform_.translation_ = { 0,0,-110 };
+	}
+	//移動ベクトル
+	
 	//Vector3 movev3 = { 0,0,0 };
 
-	int moveFlag = true;
+	
 
 	if (input_->PushKey(DIK_LSHIFT)) {
 		moveFlag = false;
@@ -86,121 +135,99 @@ void Player::Update() {
 	if (moveFlag == true) {
 		//押した方向の移動ベクトルを変更
 		if (input_->PushKey(DIK_A)) {
-			worldTransform_.rotation_.y += kRotSpeed;
-		}
-		else if (input_->PushKey(DIK_D)) {
 			worldTransform_.rotation_.y -= kRotSpeed;
 		}
+		else if (input_->PushKey(DIK_D)) {
+			worldTransform_.rotation_.y += kRotSpeed;
 
-		//押した方向で移動ベクトルを変更（左右）
-		if (input_->PushKey(DIK_LEFT)) {
-			move.x -= kCaracterSpeed;
 		}
-		else if (input_->PushKey(DIK_RIGHT)) {
-			move.x += kCaracterSpeed;
-		}
-
-		//押した方向で移動ベクトルを変更（上下）
-		if (input_->PushKey(DIK_UP)) {
-			move.y -= kCaracterSpeed;
-		}
-		else if (input_->PushKey(DIK_DOWN)) {
-			move.y += kCaracterSpeed;
-		}
-
-		//押した方向で移動ベクトルを変更（Z軸）
-		if (input_->PushKey(DIK_9)) {
-			move.z -= kCaracterSpeed;
-		}
-		else if (input_->PushKey(DIK_0)) {
-			move.z += kCaracterSpeed;
-		}
-
 	}
 
 
+		Attack();
 
-	Attack();
+		//弾更新
+		for (PlayerBullet* bullet : bullets_) {
+			bullet->Update();
+		}
 
-	//弾更新
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Update();
-	}
+		//座標移動（ベクトルの加算）
+		worldTransform_.translation_ = Transform_Move(worldTransform_.translation_, move);
+		worldTransform_.translation_.x += move.x;
+		worldTransform_.translation_.y += move.y;
+		worldTransform_.translation_.z += move.z;
 
-	//座標移動（ベクトルの加算）
-	worldTransform_.translation_.x += move.x;
-	worldTransform_.translation_.y -= move.y;
-	worldTransform_.translation_.z -= move.z;
+		// 移動限界座標
+		const float kMoveLimitX = 34;
+		const float kMoveLimitY = 18;
 
-	// 移動限界座標
-	const float kMoveLimitX = 34;
-	const float kMoveLimitY = 18;
+		// 範囲超えない処理
+		worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+		worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+		worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+		worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-	// 範囲超えない処理
-	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
-	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
-	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
-	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-
-	//Cameraにplayerを紐づけする
-	worldTransform1_.translation_.x += move.x + movev2.x + movev3.x;
-	worldTransform1_.translation_.y -= move.y + movev2.y + movev3.y;
-	worldTransform1_.translation_.z -= move.z - movev2.z - movev3.z;
-	//Cameraにplayerを戻す
-	if (input_->PushKey(DIK_SPACE)) {
-		//worldTransform1_.translation_.x = worldTransform_.translation_.x;
-		//worldTransform1_.translation_.y = worldTransform_.translation_.y + 5;
-		//worldTransform1_.translation_.z = worldTransform_.translation_.z - 10;
-		flag = true;
-		time = 0;
-		frame = 0;
-	}
-	if (flag == true) {
-		frame++;
-		worldTransform1_.translation_.x = worldTransform1_.translation_.x + (worldTransform_.translation_.x - worldTransform1_.translation_.x) * easeInQuart(frame / endFrame);
-		worldTransform1_.translation_.y = worldTransform1_.translation_.y + (worldTransform_.translation_.y+5 - worldTransform1_.translation_.y) * easeInQuart(frame / endFrame);
-		worldTransform1_.translation_.z = worldTransform1_.translation_.z + (worldTransform_.translation_.z-10 - worldTransform1_.translation_.z) * easeInQuart(frame / endFrame);
-
-
-	}if (frame >= 120) {
-		flag = false;
-		frame = 0;
-	}
+		//Cameraにplayerを紐づけする
+		//worldTransform1_.translation_.x += move.x + movev2.x + movev3.x;
+		//worldTransform1_.translation_.y -= move.y + movev2.y + movev3.y;
+		//worldTransform1_.translation_.z -= move.z - movev2.z - movev3.z;
+		//Cameraにplayerを戻す
+		if (input_->PushKey(DIK_SPACE)) {
+			//worldTransform1_.translation_.x = worldTransform_.translation_.x;
+			//worldTransform1_.translation_.y = worldTransform_.translation_.y + 5;
+			//worldTransform1_.translation_.z = worldTransform_.translation_.z - 10;
+			//flag = true;
+			time = 0;
+			frame = 0;
+		}
+		if (flag == true) {
+			frame++;
+			worldTransform1_.translation_.x = worldTransform1_.translation_.x + (worldTransform_.translation_.x - worldTransform1_.translation_.x) * easeInQuart(frame / endFrame);
+			worldTransform1_.translation_.y = worldTransform1_.translation_.y + (worldTransform_.translation_.y + 5 - worldTransform1_.translation_.y) * easeInQuart(frame / endFrame);
+			worldTransform1_.translation_.z = worldTransform1_.translation_.z + (worldTransform_.translation_.z - 10 - worldTransform1_.translation_.z) * easeInQuart(frame / endFrame);
 
 
-	// キャラクターの座標を画面表示する処理
-	ImGui::Begin("Player pos");
-	// float3入力ボックス
-	ImGui::InputFloat3("InputFloat3", &worldTransform_.translation_.x);
+		}if (frame >= 120) {
+			flag = false;
+			frame = 0;
+		}
 
-	// float3スライダー
-	ImGui::SliderFloat3("SliderFloat3", &worldTransform1_.translation_.x, -20.0f, 20.0f);
-	ImGui::SliderFloat3("SliderFloat3", &movev3.x, -20.0f, 20.0f);
 
-	ImGui::Text("PlayerBullet : Space");
-	ImGui::Text("DedugCamera : LALT");
-	ImGui::End();
+		// キャラクターの座標を画面表示する処理
+		ImGui::Begin("Player pos");
+		// float3入力ボックス
+		ImGui::InputFloat3("InputFloat3", &worldTransform_.translation_.x);
+
+		// float3スライダー
+		ImGui::InputFloat3("worldTransform1_.scale_.y", &worldTransform1_.scale_.x);
+		ImGui::InputFloat3("powerSpeed", &powerSpeed);
+
+		ImGui::SliderFloat3("SliderFloat3", &movev3.x, -20.0f, 20.0f);
+
+		ImGui::Text("PlayerBullet : Space");
+		ImGui::Text("DedugCamera : LALT");
+		ImGui::End();
 
 	
 }
 
-void Player::Attack() {
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
+	void Player::Attack() {
+		if (input_->TriggerKey(DIK_SPACE)) {
+			//弾の速度
+			const float kBulletSpeed = 1.0f;
+			Vector3 velocity(0, 0, kBulletSpeed);
 
-		//速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+			//速度ベクトルを自機の向きに合わせて回転させる
+			velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
-		//弾を生成し。初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+			//弾を生成し。初期化
+			PlayerBullet* newBullet = new PlayerBullet();
+			newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-		//弾を登録
-		bullets_.push_back(newBullet);
+			//弾を登録
+		//	bullets_.push_back(newBullet);
+		}
 	}
-}
 
 void Player::Draw(ViewProjection viewProjection_) {
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
