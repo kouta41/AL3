@@ -11,9 +11,8 @@ void block::Init(Model* model, uint32_t textureHandle) {
 }
 
 void block::Update() {
-	worldTransform_.scale_.x = 10;
-	worldTransform_.scale_.y = -10;
-	worldTransform_.translation_ = { 10,10,10 };
+	
+	worldTransform_.translation_ = { 10,0,-100 };
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 	//ワールドトランスフォームの更新
@@ -21,9 +20,8 @@ void block::Update() {
 }
 
 void block::Draw(ViewProjection viewProjection_) {
-	worldTransform_.scale_.x += 10;
 
-	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 }
 

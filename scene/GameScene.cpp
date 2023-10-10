@@ -113,11 +113,10 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-		viewProjection_.translation_ = { 0.0f,20.0f,-140.0f };
-		viewProjection_.rotation_ = { 0.3f,0.0f,0.0f };
+	viewProjection_.translation_ = { 0.0f,20.0f,-140.0f };
+	viewProjection_.rotation_ = { 0.3f,0.0f,0.0f };
 	
 	//当たり判定
-	CheckAllCollisions();
 	//
 	CheckWallCollisions();
 
@@ -269,6 +268,19 @@ void GameScene::CheckAllCollisions() {
 		}
 	}
 #pragma endregion
+
+	posA = player_->GetWorldPosition();
+	posB = block_->GetWorldPosition();
+
+	//座標AとBの距離を求める
+	posC.x = (posA.x - posB.x) * (posA.x - posB.x);
+	posC.y = (posA.y - posB.y) * (posA.y - posB.y);
+	posC.z = (posA.z - posB.z) * (posA.z - posB.z);
+
+	//球と球の当たり判定
+	if (posC.x + posC.y + posC.z <= 20) {
+		player_->OnCollision();
+	}
 }
 
 

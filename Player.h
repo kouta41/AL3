@@ -5,8 +5,9 @@
 #include"Input.h"
 #include"MathFunction.h"
 #include"ImGuiManager.h"
+#include <math.h>
 #include <cassert>
-#include<list>
+#include <list>
 
 class Player {
 	public:
