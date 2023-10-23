@@ -274,11 +274,10 @@ void GameScene::CheckAllCollisions() {
 
 	//座標AとBの距離を求める
 	posC.x = (posA.x - posB.x) * (posA.x - posB.x);
-	posC.y = (posA.y - posB.y) * (posA.y - posB.y);
 	posC.z = (posA.z - posB.z) * (posA.z - posB.z);
 
 	//球と球の当たり判定
-	if (posC.x + posC.y + posC.z <= 20) {
+	if (posC.x  + posC.z <= 20) {
 		player_->OnCollision();
 	}
 }

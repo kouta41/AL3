@@ -53,8 +53,8 @@ void Player::Update() {
 		worldTransform1_.scale_.y += powerSpeed;
 	}
 	if (input_->PushKey(DIK_SPACE)) {
-		//Speed = worldTransform1_.scale_.y - (worldTransform1_.scale_.y / 20);
-		Speed = 0.5;
+		Speed = worldTransform1_.scale_.y - (worldTransform1_.scale_.y / 20);
+		//Speed = 0.5;
 		moveFlag1 = false;
 	}
 
@@ -101,9 +101,7 @@ void Player::Update() {
 	}
 	if (moveFlag1 == false) {
 		Speed -= 0.025;
-		move.x += movev3.x;
-		move.y += movev3.y;
-		move.z += movev3.z;
+		move = Transform_Move(movev3, move);
 		if (Speed <= 0.00) {
 			Speed = 0.0f;
 			moveFlag1 = true;
@@ -142,7 +140,10 @@ void Player::Update() {
 		ImGui::Text("PlayerBullet : Space");
 		ImGui::Text("DedugCamera : LALT");
 		ImGui::End();
-
+		if (worldTransform_.translation_.x > 10) {
+			movev3.x *= -1;
+			movev3.z *= -1;
+		}
 	
 }
 
@@ -176,9 +177,9 @@ void Player::Draw(ViewProjection viewProjection_) {
 }
 
 void Player::OnCollision() {
-	move.x *= -1;
-	move.z *= -1;
-	worldTransform_.rotation_.y *= -1;
+	movev3.x *= -1;
+	movev3.z *= -1;
+	//worldTransform_.rotation_.y *= -1;
 }
 
 void Player::NotOnCollision() {
