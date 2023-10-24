@@ -22,9 +22,8 @@ Vector3 Transform_Move(const Vector3& translate, const Vector3& move) {
 
 Vector3 Transform_float(const Vector3& translate, const float& move) {
 	Vector3 result;
-	result.x = translate.x * move;
-	result.y = translate.y * move;
-	result.z = translate.z * move;
+	result.x = translate.x + move;
+	result.z = translate.z + move;
 	return result;
 };
 

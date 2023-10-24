@@ -76,6 +76,8 @@ class Player {
 		const float kRotSpeed = 0.02f;
 		int moveFlag = true;
 		int moveFlag1 = true;
+		int moveFlag2 = true;
+
 
 		int start = 30;
 		double end = 1000;

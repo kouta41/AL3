@@ -53,21 +53,19 @@ void Player::Update() {
 	}
 
 	move = { 0,0,0 };
-	movev3 = { 0.0f,0.0f , Speed };
 
-
-	if (input_->PushKey(DIK_SPACE)){
-		Speed = worldTransform1_.scale_.y - (worldTransform1_.scale_.y / 20);
-		movev3 = Normalize(movev3);
-		movev3 = Transform_float(movev3, Speed);
-		movev3 = TransformNormal(movev3, worldTransform_.matWorld_);
-		moveFlag1 = false;
+	if (input_->PushKey(DIK_2)) {
+		moveFlag2 = true;
 	}
 	if (input_->PushKey(DIK_1)) {
 		worldTransform_.translation_ = { 0,0,-110 };
 		worldTransform_.rotation_ = { 0,0,0 };
-		moveFlag1 = true;
+		Speed = 0;
+		movev3 = { 0.0f,0.0f, Speed };
+
+		moveFlag1 = true;  
 		moveFlag = true;
+		moveFlag2 = true;
 	}
 	if (input_->PushKey(DIK_A)) {
 		worldTransform_.rotation_.y -= kRotSpeed;
@@ -76,9 +74,106 @@ void Player::Update() {
 		worldTransform_.rotation_.y += kRotSpeed;
 	}
 
+	if (input_->TriggerKey(DIK_SPACE)){
+		Speed = worldTransform1_.scale_.y ;
+		movev3 = { 0.0f,0.0f, Speed };
+		movev3 = TransformNormal(movev3, worldTransform_.matWorld_);
+		moveFlag1 = false;
+	}
 
 	if (moveFlag1 == false) {
-		move = Transform_Move(move, movev3);
+
+		if (moveFlag == true) {
+			movev3 = Normalize(movev3);
+			movev3.x += Speed + Speed / 10;
+			movev3.z += Speed + Speed / 10;
+			moveFlag = false;
+		}
+
+		if (worldTransform_.translation_.x > 10) {
+			movev3.x *= -1;
+			if (moveFlag2 == true) {
+				if (movev3.x < 0) {
+					movev3.x += 0.5f;
+					movev3.z += 0.5f;
+					if (movev3.x > 0) {
+						moveFlag2 = false;
+					}
+				}
+				if (movev3.x > 0) {
+					movev3.x -= 0.5f;
+					movev3.z -= 0.5f;
+					if (movev3.x < 0) {
+						moveFlag2 = false;
+					}
+				}
+			}
+		}
+		
+		if (worldTransform_.translation_.x < -10) {
+			movev3.x *= -1;
+			if (moveFlag2 == true) {
+
+				if (movev3.x < 0) {
+					movev3.x += 0.5f;
+					movev3.z += 0.5f;
+					if (movev3.x > 0) {
+						moveFlag2 = false;
+					}
+				}
+				if (movev3.x > 0) {
+					movev3.x -= 0.5f;
+					movev3.z -= 0.5f;
+					if (movev3.x < 0) {
+						moveFlag2 = false;
+					}
+				}
+
+			}
+		}
+		if (worldTransform_.translation_.z < -120) {
+			movev3.z *= -1;
+			if (moveFlag2 == true) {
+
+				if (movev3.x < 0) {
+					movev3.x += 0.5f;
+					movev3.z += 0.5f;
+					if (movev3.x > 0) {
+						moveFlag2 = false;
+					}
+				}
+				if (movev3.x > 0) {
+					movev3.x -= 0.5f;
+					movev3.z -= 0.5f;
+					if (movev3.x < 0) {
+						moveFlag2 = false;
+					}
+				}
+
+			}
+		}
+		if (worldTransform_.translation_.z > -90) {
+			movev3.z *= -1;
+			if (moveFlag2 == true) {
+
+				if (movev3.x < 0) {
+					movev3.x += 0.5f;
+					movev3.z += 0.5f;
+					if (movev3.x > 0) {
+						moveFlag2 = false;
+					}
+				}
+				if (movev3.x > 0) {
+					movev3.x -= 0.5f;
+					movev3.z -= 0.5f;
+					if (movev3.x < 0) {
+						moveFlag2 = false;
+					}
+				}
+
+			}
+		}
+			move = movev3;
 	}
 
 	//座標移動（ベクトルの加算）
