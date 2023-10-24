@@ -66,9 +66,9 @@ class Player {
 		//移動ベクトル
 		Vector3 move = { 0,0,0 };
 		Vector3 movev2 = { 0,0,0 };
-		Vector3 movev3 = { 0,0,0 };
+		Vector3 movev3 = { 0,0,Speed };
 
-
+		
 		//キャラクターの移動の速さ
 		const float kCaracterSpeed = 0.2f;
 
