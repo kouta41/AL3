@@ -38,7 +38,7 @@ void Player::Update() {
 	//ワールドトランスフォームの更新
 	worldTransform1_.UpdateMatrix();
 
-
+	//パワーメータの位置固定
 	worldTransform1_.translation_.x = worldTransform_.translation_.x + 2;
 	worldTransform1_.translation_.y = worldTransform_.translation_.y + 2;
 	worldTransform1_.translation_.z = worldTransform_.translation_.z - 2;
@@ -106,18 +106,25 @@ void Player::Update() {
 			movev2.x *= -1;
 		}
 		if (worldTransform_.translation_.z < -120) {
-			movev2.z *= -1;
+			//movev2.z *= -1;
 		}
 		if (worldTransform_.translation_.z > -90) {
-			movev2.z *= -1;
+			//movev2.z *= -1;
 		}
 		//playerの座標移動
 		worldTransform_.translation_.x += move.x * movev2.x;
 		worldTransform_.translation_.z += move.z * movev2.z;
 	}
 
-	
-	
+	if (worldTransform_.translation_.x < 1 &&
+		worldTransform_.translation_.x > -1&&
+		worldTransform_.translation_.z>-10&&
+		worldTransform_.translation_.z<10) {
+		movev2.y++;
+	}
+	if (movev2.y > 240) {
+		movev2.y--;
+	}
 
 		// キャラクターの座標を画面表示する処理
 		ImGui::Begin("Player pos");
@@ -130,8 +137,8 @@ void Player::Update() {
 		ImGui::InputFloat3("powerSpeed", &powerSpeed);
 
 		ImGui::SliderFloat3("movev3", &movev3.x, -20.0f, 20.0f);
+		ImGui::SliderFloat3("movev2", &movev2.x, -20.0f, 20.0f);
 		ImGui::SliderFloat3("move", &move.x, -20.0f, 20.0f);
-
 		ImGui::SliderFloat3("worldTransform_.matWorld_0", &worldTransform_.matWorld_.m[0][1], -20.0f, 20.0f);
 		ImGui::SliderFloat3("worldTransform_.matWorld_1", &worldTransform_.matWorld_.m[1][1], -20.0f, 20.0f);
 		ImGui::SliderFloat3("worldTransform_.matWorld_2", &worldTransform_.matWorld_.m[2][1], -20.0f, 20.0f);
