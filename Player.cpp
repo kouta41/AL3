@@ -43,6 +43,7 @@ void Player::Update() {
 	worldTransform1_.translation_.y = worldTransform_.translation_.y + 2;
 	worldTransform1_.translation_.z = worldTransform_.translation_.z - 2;
 
+	//パワーメーター
 	if (worldTransform1_.scale_.y >= 3.0f) {
 		powerSpeed *=-1;
 	}
@@ -54,9 +55,7 @@ void Player::Update() {
 	}
 
 
-	if (input_->PushKey(DIK_2)) {
-		moveFlag2 = true;
-	}
+	//リセット
 	if (input_->PushKey(DIK_1)) {
 		worldTransform_.translation_ = { 0,0,-110 };
 		worldTransform_.rotation_ = { 0,0,0 };
@@ -69,6 +68,8 @@ void Player::Update() {
 		moveFlag2 = true;
 	}
 
+
+	//playerの向き
 	if (input_->PushKey(DIK_A)) {
 		worldTransform_.rotation_.y -= kRotSpeed;
 	}
@@ -76,6 +77,7 @@ void Player::Update() {
 		worldTransform_.rotation_.y += kRotSpeed;
 	}
 
+	//playerの発射
 	if (input_->TriggerKey(DIK_SPACE)){
 		Speed = worldTransform1_.scale_.y ;
 		move = { 0,0,0 };
@@ -87,21 +89,15 @@ void Player::Update() {
 		moveFlag1 = false;
 	}
 
+	//playerの動き
 	if (moveFlag1 == false) {
 
-		if (moveFlag == true) {
-			moveFlag = false;
-		}
-
-		if (moveFlag2 == true) {
-			move.x -= (move.x / 100) * 2;
-			move.z -= (move.z / 100) * 2;
-			if (move.x < 0 || move.z < 0) {
-				//moveFlag1 = true;
-			}
-		}
+		//playerの減速
+		move.x -= (move.x / 100) * 2;
+		move.z -= (move.z / 100) * 2;
 
 
+		//playerの反射
 		if (worldTransform_.translation_.x > 10) {
 			movev2.x *= -1;
 		}
@@ -115,7 +111,7 @@ void Player::Update() {
 		if (worldTransform_.translation_.z > -90) {
 			movev2.z *= -1;
 		}
-
+		//playerの座標移動
 		worldTransform_.translation_.x += move.x * movev2.x;
 		worldTransform_.translation_.z += move.z * movev2.z;
 	}
@@ -151,14 +147,10 @@ void Player::Update() {
 	}
 
 void Player::Draw(ViewProjection viewProjection_) {
+	//player
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	//パワーメータ
 	model_->Draw(worldTransform1_, viewProjection_, textureHandle1_);
-
-
-	// 弾描画
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw(viewProjection_);
-	}
 }
 
 void Player::OnCollision() {
