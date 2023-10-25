@@ -24,6 +24,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle, uint32_t textureHa
 	worldTransform1_.translation_.x = worldTransform_.translation_.x +2;
 	worldTransform1_.translation_.y = worldTransform_.translation_.y + 2;
 	worldTransform1_.translation_.z = worldTransform_.translation_.z -2;
+//	worldTransform_.rotation_.y = 1;
 	worldTransform1_.scale_ = { 0.5f,1.0f,0.5f };
 }
 
@@ -52,7 +53,6 @@ void Player::Update() {
 		worldTransform1_.scale_.y += powerSpeed;
 	}
 
-	move = { 0,0,0 };
 
 	if (input_->PushKey(DIK_2)) {
 		moveFlag2 = true;
@@ -62,11 +62,13 @@ void Player::Update() {
 		worldTransform_.rotation_ = { 0,0,0 };
 		Speed = 0;
 		movev3 = { 0.0f,0.0f, Speed };
-
+		move = { 0,0,0 };
+		movev2 = { 1,0,1 };
 		moveFlag1 = true;  
 		moveFlag = true;
 		moveFlag2 = true;
 	}
+
 	if (input_->PushKey(DIK_A)) {
 		worldTransform_.rotation_.y -= kRotSpeed;
 	}
@@ -76,109 +78,50 @@ void Player::Update() {
 
 	if (input_->TriggerKey(DIK_SPACE)){
 		Speed = worldTransform1_.scale_.y ;
+		move = { 0,0,0 };
+		movev2 = { 1,0,1 };
 		movev3 = { 0.0f,0.0f, Speed };
 		movev3 = TransformNormal(movev3, worldTransform_.matWorld_);
+		move = movev3;
+
 		moveFlag1 = false;
 	}
 
 	if (moveFlag1 == false) {
 
 		if (moveFlag == true) {
-			movev3 = Normalize(movev3);
-			movev3.x += Speed + Speed / 10;
-			movev3.z += Speed + Speed / 10;
 			moveFlag = false;
 		}
 
-		if (worldTransform_.translation_.x > 10) {
-			movev3.x *= -1;
-			if (moveFlag2 == true) {
-				if (movev3.x < 0) {
-					movev3.x += 0.5f;
-					movev3.z += 0.5f;
-					if (movev3.x > 0) {
-						moveFlag2 = false;
-					}
-				}
-				if (movev3.x > 0) {
-					movev3.x -= 0.5f;
-					movev3.z -= 0.5f;
-					if (movev3.x < 0) {
-						moveFlag2 = false;
-					}
-				}
+		if (moveFlag2 == true) {
+			move.x -= (move.x / 100) * 2;
+			move.z -= (move.z / 100) * 2;
+			if (move.x < 0 || move.z < 0) {
+				//moveFlag1 = true;
 			}
+		}
+
+
+		if (worldTransform_.translation_.x > 10) {
+			movev2.x *= -1;
 		}
 		
 		if (worldTransform_.translation_.x < -10) {
-			movev3.x *= -1;
-			if (moveFlag2 == true) {
-
-				if (movev3.x < 0) {
-					movev3.x += 0.5f;
-					movev3.z += 0.5f;
-					if (movev3.x > 0) {
-						moveFlag2 = false;
-					}
-				}
-				if (movev3.x > 0) {
-					movev3.x -= 0.5f;
-					movev3.z -= 0.5f;
-					if (movev3.x < 0) {
-						moveFlag2 = false;
-					}
-				}
-
-			}
+			movev2.x *= -1;
 		}
 		if (worldTransform_.translation_.z < -120) {
-			movev3.z *= -1;
-			if (moveFlag2 == true) {
-
-				if (movev3.x < 0) {
-					movev3.x += 0.5f;
-					movev3.z += 0.5f;
-					if (movev3.x > 0) {
-						moveFlag2 = false;
-					}
-				}
-				if (movev3.x > 0) {
-					movev3.x -= 0.5f;
-					movev3.z -= 0.5f;
-					if (movev3.x < 0) {
-						moveFlag2 = false;
-					}
-				}
-
-			}
+			movev2.z *= -1;
 		}
 		if (worldTransform_.translation_.z > -90) {
-			movev3.z *= -1;
-			if (moveFlag2 == true) {
-
-				if (movev3.x < 0) {
-					movev3.x += 0.5f;
-					movev3.z += 0.5f;
-					if (movev3.x > 0) {
-						moveFlag2 = false;
-					}
-				}
-				if (movev3.x > 0) {
-					movev3.x -= 0.5f;
-					movev3.z -= 0.5f;
-					if (movev3.x < 0) {
-						moveFlag2 = false;
-					}
-				}
-
-			}
+			movev2.z *= -1;
 		}
-			move = movev3;
+
+		worldTransform_.translation_.x += move.x * movev2.x;
+		worldTransform_.translation_.z += move.z * movev2.z;
 	}
 
-	//座標移動（ベクトルの加算）
-	worldTransform_.translation_ = Transform_Move(worldTransform_.translation_, move);
-
+	
+	
 
 		// キャラクターの座標を画面表示する処理
 		ImGui::Begin("Player pos");
@@ -192,6 +135,11 @@ void Player::Update() {
 
 		ImGui::SliderFloat3("movev3", &movev3.x, -20.0f, 20.0f);
 		ImGui::SliderFloat3("move", &move.x, -20.0f, 20.0f);
+
+		ImGui::SliderFloat3("worldTransform_.matWorld_0", &worldTransform_.matWorld_.m[0][1], -20.0f, 20.0f);
+		ImGui::SliderFloat3("worldTransform_.matWorld_1", &worldTransform_.matWorld_.m[1][1], -20.0f, 20.0f);
+		ImGui::SliderFloat3("worldTransform_.matWorld_2", &worldTransform_.matWorld_.m[2][1], -20.0f, 20.0f);
+		ImGui::SliderFloat3("worldTransform_.matWorld_3", &worldTransform_.matWorld_.m[3][1], -20.0f, 20.0f);
 
 		ImGui::Text("PlayerBullet : Space");
 		ImGui::Text("DedugCamera : LALT");
