@@ -116,12 +116,14 @@ void Player::Update() {
 		worldTransform_.translation_.z += move.z * movev2.z;
 	}
 
-	if (worldTransform_.translation_.x < 1 &&
+	//エリアにいるとタイマーが進む
+	if (worldTransform_.translation_.x < 1 && 
 		worldTransform_.translation_.x > -1&&
 		worldTransform_.translation_.z>-10&&
 		worldTransform_.translation_.z<10) {
 		movev2.y++;
 	}
+	//ゲームクリアのフラグ
 	if (movev2.y > 240) {
 		movev2.y--;
 	}
